@@ -159,7 +159,7 @@ export function GameShell({ game }: { game: GameDef }) {
         <span className="header-chip">
           {Array.from({ length: game.roundsPerSession }, (_, i) => (
             <span key={i} className={i <= session.roundIndex ? '' : 'dot-dim'}>
-              {i < session.roundIndex || rs.solved ? '⭐' : '●'}
+              {i < session.roundIndex || (i === session.roundIndex && rs.solved) ? '⭐' : '●'}
             </span>
           ))}
         </span>
@@ -185,7 +185,7 @@ export function GameShell({ game }: { game: GameDef }) {
 
       {Display && (
         <div className="game-display">
-          <Display round={round} hintTier={tier} />
+          <Display round={round} hintTier={tier} solved={rs.solved} />
         </div>
       )}
 

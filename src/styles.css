@@ -1098,3 +1098,101 @@ button {
     opacity: 0.7;
   }
 }
+
+/* ---------- Word Builder ---------- */
+
+.word-picture {
+  font-size: 5rem;
+  line-height: 1;
+  animation: bounce-slow 2.4s ease-in-out infinite;
+}
+
+.word-slots {
+  display: flex;
+  gap: 10px;
+}
+
+.word-slot {
+  width: 64px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.4rem;
+  font-weight: 700;
+  background: var(--paper);
+  border-radius: 18px;
+  border-bottom: 5px solid rgba(58, 52, 80, 0.25);
+  color: var(--ink);
+}
+
+.word-slot.filled {
+  background: var(--leaf);
+  border-bottom-color: var(--leaf-deep);
+  color: #fff;
+}
+
+.word-slot.next-slot {
+  outline: 4px dashed var(--sun);
+  outline-offset: 3px;
+}
+
+.letter-bank {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  max-width: 560px;
+}
+
+.letter-tile {
+  min-width: 72px;
+  min-height: 72px;
+  padding: 8px;
+  font-size: 1.9rem;
+}
+
+.tile-used {
+  opacity: 0;
+  transform: scale(0.3);
+  pointer-events: none;
+}
+
+/* ---------- Times Table Garden ---------- */
+
+.garden {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: linear-gradient(#d9f2c4, #b5e39a);
+  border-radius: 18px;
+  padding: 14px 18px;
+}
+
+.garden-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.seed {
+  font-size: 1.8rem;
+  animation: sticker-in 0.4s ease backwards;
+  display: inline-block;
+}
+
+.seed.bloomed {
+  animation: bloom 0.5s ease backwards;
+}
+
+@keyframes bloom {
+  0% {
+    transform: scale(0.4) rotate(-30deg);
+  }
+  60% {
+    transform: scale(1.25) rotate(8deg);
+  }
+  100% {
+    transform: scale(1) rotate(0);
+  }
+}

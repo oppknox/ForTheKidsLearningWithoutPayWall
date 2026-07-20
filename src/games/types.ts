@@ -26,6 +26,8 @@ export interface Round {
 export interface DisplayProps {
   round: Round
   hintTier: number
+  /** True once the round is answered correctly — lets scenes celebrate (bloom, blast off). */
+  solved?: boolean
 }
 
 export interface GameDef {

@@ -35,13 +35,17 @@ import countTheFish from './numbers/countTheFish'
 import bubbleAddition from './numbers/bubbleAddition'
 import arrayBuilder from './multiplication/arrayBuilder'
 import rocketRace from './multiplication/rocketRace'
+import wordBuilder from './letters/wordBuilder'
+import timesTableGarden from './multiplication/timesTableGarden'
 
 export const GAMES: GameDef[] = [
   letterPop,
   letterMatch,
   alphabetParade,
+  wordBuilder,
   countTheFish,
   bubbleAddition,
+  timesTableGarden,
   arrayBuilder,
   rocketRace,
 ]
