@@ -10,6 +10,7 @@ import { loadState, saveState } from '../lib/storage'
 import { setSpeechMuted, setPreferredVoiceName } from '../lib/speech'
 import { setSfxMuted } from '../lib/sfx'
 import { reducer, type Action } from './reducer'
+import { scheduleCloudBackup } from '../lib/cloudSync'
 
 interface Ctx {
   state: AppState
@@ -27,6 +28,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     setSpeechMuted(state.muted)
     setSfxMuted(state.muted)
     setPreferredVoiceName(state.voiceName)
+    scheduleCloudBackup(state)
   }, [state])
 
   const activeProfile =

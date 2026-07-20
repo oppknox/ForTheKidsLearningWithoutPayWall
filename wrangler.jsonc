@@ -1,6 +1,9 @@
 {
+  "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "for-the-kids",
-  "compatibility_date": "2026-07-01",
+  "main": "./worker/index.ts",
+  "compatibility_date": "2026-07-20",
+  "compatibility_flags": ["nodejs_compat"],
   "workers_dev": true,
   "routes": [
     { "pattern": "freekidslearning.com", "custom_domain": true },
@@ -10,6 +13,20 @@
   ],
   "assets": {
     "directory": "./dist",
-    "not_found_handling": "single-page-application"
+    "not_found_handling": "single-page-application",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "pips-playground-sync",
+      "database_id": "287d8326-d77e-4e2f-80de-4e52ea509598",
+      "migrations_dir": "./migrations"
+    }
+  ],
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
   }
 }

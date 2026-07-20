@@ -484,8 +484,38 @@ button {
 .install-card h2 { font-size: 1.15rem; margin-bottom: 4px; }
 .install-note { background: var(--paper); padding: 12px 18px; border-radius: 16px; }
 
+.backup-panel {
+  width: min(700px, 100%);
+  display: grid;
+  gap: 16px;
+  background: var(--paper);
+  padding: 20px;
+  border-radius: 22px;
+  box-shadow: 0 4px 12px rgba(58, 52, 80, 0.14);
+}
+
+.backup-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.backup-heading h2 { font-size: 1.3rem; margin-bottom: 4px; }
+.backup-heading p { line-height: 1.4; }
+.sync-indicator { flex: none; padding: 6px 12px; border-radius: 999px; background: #eee; font-weight: 700; }
+.sync-indicator.connected { color: #1f6930; background: #dff5e2; }
+.backup-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.manage-edit.secondary { color: var(--ink); background: #e9e3f8; }
+.vault-setup, .connected-vault { display: grid; gap: 14px; }
+.restore-row { display: grid; gap: 8px; padding-top: 14px; border-top: 2px solid rgba(58, 52, 80, 0.1); }
+.restore-row textarea { width: 100%; resize: vertical; padding: 10px 12px; border: 2px solid #c8bddf; border-radius: 12px; font: 0.9rem ui-monospace, monospace; }
+.recovery-box { display: grid; gap: 10px; padding: 14px; border: 3px solid var(--sun); border-radius: 16px; background: #fff9df; }
+.recovery-box code { overflow-wrap: anywhere; user-select: all; padding: 10px; border-radius: 10px; background: #fff; font-size: 0.78rem; }
+.recovery-box small { line-height: 1.35; }
+.backup-status { padding: 9px 12px; border-radius: 12px; font-weight: 700; }
+.backup-status.success { color: #1f6930; background: #dff5e2; }
+.backup-status.error { color: #8a2a1b; background: #ffe2dc; }
+.backup-status.working { background: #eef6ff; }
+
 @media (max-width: 520px) {
   .install-card { align-items: stretch; flex-direction: column; text-align: center; }
+  .backup-heading { flex-direction: column; }
+  .backup-actions > button { width: 100%; }
 }
 
 /* ---------- Profile editor ---------- */
@@ -1684,4 +1714,56 @@ button.header-chip { border: none; cursor: pointer; font-family: var(--font); }
 
 .release:last-of-type {
   border-bottom: none;
+}
+
+/* ---------- Feedback form ---------- */
+
+.feedback-form label {
+  font-weight: 700;
+}
+
+.feedback-form label em {
+  font-weight: 400;
+  opacity: 0.75;
+}
+
+.kind-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.kind-swatch {
+  font-size: 1.05rem;
+  padding: 10px 16px;
+}
+
+.feedback-text {
+  font-family: var(--font);
+  font-size: 1.05rem;
+  padding: 12px 14px;
+  border: 3px solid var(--ink);
+  border-radius: 16px;
+  resize: vertical;
+  color: var(--ink);
+}
+
+.feedback-contact {
+  font-size: 1.05rem;
+  width: 100%;
+  text-align: left;
+}
+
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  height: 1px;
+  width: 1px;
+  opacity: 0;
+}
+
+.feedback-error {
+  color: #b3403a;
+  font-weight: 700;
 }

@@ -7,6 +7,7 @@ import { randInt } from '../lib/rng'
 import { InstallApp } from '../components/InstallApp'
 import { VoicePicker } from '../components/VoicePicker'
 import { SiteFooter } from '../components/SiteFooter'
+import { BackupSync } from '../components/BackupSync'
 
 const GATE_KEY = 'ftk-gate-ok'
 const GATE_TTL_MS = 10 * 60 * 1000
@@ -133,6 +134,7 @@ function GrownUps() {
         Mute all sound and voices
       </label>
       <VoicePicker />
+      <BackupSync />
       <InstallApp />
       <SiteFooter />
     </main>
