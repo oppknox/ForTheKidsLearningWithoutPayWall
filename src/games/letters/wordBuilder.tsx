@@ -180,7 +180,7 @@ function FreePlay() {
         <span className="header-chip">
           {Array.from({ length: WORDS_PER_SESSION }, (_, i) => (
             <span key={i} className={i <= wordsDone ? '' : 'dot-dim'}>
-              {i < wordsDone || wordComplete ? '⭐' : '●'}
+              {i < wordsDone || (i === wordsDone && wordComplete) ? '⭐' : '●'}
             </span>
           ))}
         </span>
