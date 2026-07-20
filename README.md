@@ -1,5 +1,7 @@
 # For The Kids — Learning Without a Paywall
 
+**Live at: https://for-the-kids.seanknox.workers.dev**
+
 A free, ad-free, interactive learning site for kids ages 3–10. Parents create child
 profiles (stored locally in the browser — no accounts, no server, no cost), kids pick
 their avatar and play their way through three worlds:
@@ -25,8 +27,12 @@ npm test         # unit tests (round generators, progression, hints, storage)
 npm run build    # production build in dist/
 ```
 
-The production build in `dist/` is fully static — host it anywhere free
-(Cloudflare Pages, Netlify, GitHub Pages).
+The production build in `dist/` is fully static. It deploys to Cloudflare
+Workers (free tier) with:
+
+```bash
+npm run build && npx wrangler deploy
+```
 
 ## Roadmap
 
