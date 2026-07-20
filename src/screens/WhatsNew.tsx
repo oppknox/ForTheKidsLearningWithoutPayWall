@@ -1,6 +1,5 @@
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { BigButton } from '../components/BigButton'
-import { FEEDBACK_MAILTO } from '../components/SiteFooter'
 
 const RELEASES: { date: string; title: string; items: string[] }[] = [
   {
@@ -73,7 +72,7 @@ export function WhatsNew() {
           </div>
         ))}
         <p>
-          Got an idea for a game? <a href={FEEDBACK_MAILTO}>Tell us!</a>
+          Got an idea for a game? <Link to="/feedback">Tell us!</Link>
         </p>
       </section>
       <BigButton color="var(--ocean)" onClick={() => navigate('/')}>

@@ -1,6 +1,5 @@
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { BigButton } from '../components/BigButton'
-import { FEEDBACK_EMAIL } from '../components/SiteFooter'
 
 export function Privacy() {
   const navigate = useNavigate()
@@ -42,9 +41,13 @@ export function Privacy() {
           identify or profile anyone.
         </p>
 
-        <h2>Questions?</h2>
+        <h2>The feedback form</h2>
         <p>
-          Email <a href={`mailto:${FEEDBACK_EMAIL}`}>{FEEDBACK_EMAIL}</a>.
+          If you use the <Link to="/feedback">feedback form</Link>, we receive
+          exactly what you type — your message and, only if you choose to give
+          it, an email address for a reply. That's the one and only way any
+          information reaches us, and we use it for nothing but reading and
+          answering your note.
         </p>
 
         <p className="info-date">Last updated: July 20, 2026</p>

@@ -17,6 +17,7 @@ export type Action =
   | { type: 'recordHint'; gameId: string; startLevel?: number }
   | { type: 'setMuted'; muted: boolean }
   | { type: 'setVoice'; voiceName: string | null }
+  | { type: 'replaceState'; state: AppState }
 
 function updateActive(s: AppState, fn: (p: Profile) => Profile): AppState {
   if (!s.activeProfileId) return s
@@ -78,5 +79,7 @@ export function reducer(s: AppState, a: Action): AppState {
       return { ...s, muted: a.muted }
     case 'setVoice':
       return { ...s, voiceName: a.voiceName }
+    case 'replaceState':
+      return structuredClone(a.state)
   }
 }

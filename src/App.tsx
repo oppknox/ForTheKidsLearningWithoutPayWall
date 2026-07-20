@@ -5,6 +5,7 @@ import { WhoIsPlaying } from './screens/WhoIsPlaying'
 import { ParentGate } from './screens/ParentGate'
 import { ProfileEditor } from './screens/ProfileEditor'
 import { Privacy } from './screens/Privacy'
+import { Feedback } from './screens/Feedback'
 import { WhatsNew } from './screens/WhatsNew'
 import { WorldMap } from './screens/WorldMap'
 import { WorldScreen } from './screens/WorldScreen'
@@ -73,6 +74,7 @@ export default function App() {
             <Route path="/" element={<WhoIsPlaying />} />
             <Route path="/grown-ups" element={<ParentGate />} />
             <Route path="/privacy" element={<Privacy />} />
+            <Route path="/feedback" element={<Feedback />} />
             <Route path="/whats-new" element={<WhatsNew />} />
             <Route path="/grown-ups/edit/:id?" element={<ProfileEditor />} />
             <Route path="/play" element={<RequireKid><WorldMap /></RequireKid>} />
