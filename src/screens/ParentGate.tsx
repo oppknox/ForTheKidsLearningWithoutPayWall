@@ -5,10 +5,40 @@ import { AvatarSVG } from '../components/AvatarSVG'
 import { BigButton } from '../components/BigButton'
 import { randInt } from '../lib/rng'
 
-/** Grown-ups area: a typed multiplication gate, then profile management. */
+const GATE_KEY = 'ftk-gate-ok'
+const GATE_TTL_MS = 10 * 60 * 1000
+
+function gateRecentlyPassed(): boolean {
+  try {
+    const at = Number(sessionStorage.getItem(GATE_KEY))
+    return Boolean(at) && Date.now() - at < GATE_TTL_MS
+  } catch {
+    return false
+  }
+}
+
+function rememberGatePass(): void {
+  try {
+    sessionStorage.setItem(GATE_KEY, String(Date.now()))
+  } catch {
+    /* private mode — gate will just re-ask */
+  }
+}
+
+/** Grown-ups area: a typed multiplication gate, then profile management.
+ * A pass sticks for 10 minutes so saving a profile doesn't re-ask. */
 export function ParentGate() {
-  const [passed, setPassed] = useState(false)
-  return passed ? <GrownUps /> : <Gate onPass={() => setPassed(true)} />
+  const [passed, setPassed] = useState(gateRecentlyPassed)
+  return passed ? (
+    <GrownUps />
+  ) : (
+    <Gate
+      onPass={() => {
+        rememberGatePass()
+        setPassed(true)
+      }}
+    />
+  )
 }
 
 function Gate({ onPass }: { onPass: () => void }) {
