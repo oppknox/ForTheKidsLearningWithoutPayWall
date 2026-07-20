@@ -185,7 +185,7 @@ export function GameShell({ game }: { game: GameDef }) {
 
       {Display && (
         <div className="game-display">
-          <Display round={round} hintTier={tier} />
+          <Display round={round} hintTier={tier} solved={rs.solved} />
         </div>
       )}
 
