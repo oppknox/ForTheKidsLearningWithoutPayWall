@@ -1,0 +1,17 @@
+{
+  "id": "/",
+  "name": "Pip's Playground — Free Learning Games",
+  "short_name": "Pip's Playground",
+  "description": "Free, ad-free learning games for kids ages 3–10.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#dff7ff",
+  "theme_color": "#7ed6f5",
+  "categories": ["education", "kids", "games"],
+  "icons": [
+    { "src": "/icons/pip-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icons/pip-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

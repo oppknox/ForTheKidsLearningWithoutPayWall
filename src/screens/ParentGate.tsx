@@ -4,6 +4,7 @@ import { useAppState } from '../state/ProfilesContext'
 import { AvatarSVG } from '../components/AvatarSVG'
 import { BigButton } from '../components/BigButton'
 import { randInt } from '../lib/rng'
+import { InstallApp } from '../components/InstallApp'
 
 const GATE_KEY = 'ftk-gate-ok'
 const GATE_TTL_MS = 10 * 60 * 1000
@@ -129,6 +130,7 @@ function GrownUps() {
         />
         Mute all sound and voices
       </label>
+      <InstallApp />
     </main>
   )
 }

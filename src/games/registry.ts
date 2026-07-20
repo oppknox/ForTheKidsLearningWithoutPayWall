@@ -39,6 +39,12 @@ import wordBuilder from './letters/wordBuilder'
 import timesTableGarden from './multiplication/timesTableGarden'
 import rhymeTime from './letters/rhymeTime'
 import numberLineFrog from './numbers/numberLineFrog'
+import shapeSafari from './letters/shapeSafari'
+import soundGarden from './letters/soundGarden'
+import patternParade from './numbers/patternParade'
+import clockworkCastle from './numbers/clockworkCastle'
+import storyProblemTheater from './numbers/storyProblemTheater'
+import fractionPizza from './multiplication/fractionPizza'
 
 export const GAMES: GameDef[] = [
   letterPop,
@@ -46,12 +52,18 @@ export const GAMES: GameDef[] = [
   alphabetParade,
   wordBuilder,
   rhymeTime,
+  shapeSafari,
+  soundGarden,
   countTheFish,
   bubbleAddition,
   numberLineFrog,
+  patternParade,
+  clockworkCastle,
+  storyProblemTheater,
   timesTableGarden,
   arrayBuilder,
   rocketRace,
+  fractionPizza,
 ]
 
 export function gamesForWorld(w: WorldId): GameDef[] {
