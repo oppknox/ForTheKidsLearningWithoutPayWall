@@ -22,14 +22,26 @@ export function generateFractionRound(level: number): Round {
     promptText: 'How much pizza has toppings?',
     promptSpeech: `Fraction Pizza Party! What fraction of the pizza has toppings?`,
     choices: shuffle([answer, ...distractors]).map((f) => ({ id: f.label, label: f.label })), answerId: answer.label,
-    hints: { nudge: `Count ${answer.d} equal slices. ${answer.n} have toppings.`, explain: `${answer.n} out of ${answer.d} equal slices is ${answer.words}.` },
+    hints: {
+      nudge: `There are ${answer.d} equal slices. ${answer.n} ${answer.n === 1 ? 'slice has' : 'slices have'} toppings.`,
+      explain: `${answer.n} out of ${answer.d} equal slices ${answer.n === 1 ? 'has' : 'have'} toppings. That is ${answer.words}.`,
+    },
     payload: answer,
   }
 }
 
 function Display({ round, hintTier }: DisplayProps) {
   const { n, d } = round.payload as { n: number; d: number }
-  return <div className={`pizza-parts parts-${d}`} role="img" aria-label={`${n} of ${d} pizza slices have toppings`}>{Array.from({ length: d }, (_, i) => <span key={i} className={i < n ? 'topped' : ''}>{i < n ? '🍕' : '△'}</span>)}{hintTier >= 2 && <strong>{n} of {d}</strong>}</div>
+  return (
+    <div className={`pizza-parts parts-${d}`} role="img" aria-label={`${n} of ${d} pizza slices ${n === 1 ? 'has' : 'have'} toppings`}>
+      {Array.from({ length: d }, (_, i) => (
+        <span key={i} className={`pizza-slice ${i < n ? 'topped' : ''}`} aria-hidden="true">
+          {i < n && <i className="pepperoni" />}
+        </span>
+      ))}
+      {hintTier >= 2 && <strong>{n} of {d}</strong>}
+    </div>
+  )
 }
 
 const fractionPizza: GameDef = {

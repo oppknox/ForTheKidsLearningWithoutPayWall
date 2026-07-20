@@ -154,6 +154,15 @@ describe('recordHint', () => {
   })
 })
 
+describe('setVoice', () => {
+  it('stores a chosen voice name and can clear back to automatic', () => {
+    let s = reducer(structuredClone(DEFAULT_STATE), { type: 'setVoice', voiceName: 'Samantha' })
+    expect(s.voiceName).toBe('Samantha')
+    s = reducer(s, { type: 'setVoice', voiceName: null })
+    expect(s.voiceName).toBeNull()
+  })
+})
+
 describe('setMuted', () => {
   it('toggles the muted flag', () => {
     const s = reducer(structuredClone(DEFAULT_STATE), { type: 'setMuted', muted: true })

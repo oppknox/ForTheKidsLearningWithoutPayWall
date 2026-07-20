@@ -14,7 +14,8 @@ export function loadState(): AppState {
     ) {
       return structuredClone(DEFAULT_STATE)
     }
-    return parsed as AppState
+    // Older saves may predate newer settings fields — fill gaps with defaults.
+    return { ...structuredClone(DEFAULT_STATE), ...(parsed as AppState) }
   } catch {
     return structuredClone(DEFAULT_STATE)
   }

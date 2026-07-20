@@ -16,6 +16,7 @@ const sampleState: AppState = {
   ],
   activeProfileId: 'p1',
   muted: false,
+  voiceName: null,
 }
 
 describe('storage', () => {
@@ -48,6 +49,14 @@ describe('storage', () => {
     a.muted = true
     expect(loadState().muted).toBe(false)
     expect(DEFAULT_STATE.muted).toBe(false)
+  })
+
+  it('fills in fields missing from older saved states with defaults', () => {
+    const legacy = { profiles: [], activeProfileId: null, muted: true }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(legacy))
+    const loaded = loadState()
+    expect(loaded.muted).toBe(true)
+    expect(loaded.voiceName).toBeNull()
   })
 
   it('saveState never throws when setItem throws', () => {
