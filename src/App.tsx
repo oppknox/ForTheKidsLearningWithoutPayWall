@@ -1,6 +1,8 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AppStateProvider } from './state/ProfilesContext'
-import { Mascot } from './components/Mascot'
+import { WhoIsPlaying } from './screens/WhoIsPlaying'
+import { ParentGate } from './screens/ParentGate'
+import { ProfileEditor } from './screens/ProfileEditor'
 
 function Clouds() {
   const clouds = [
@@ -26,15 +28,6 @@ function Clouds() {
   )
 }
 
-function Home() {
-  return (
-    <main className="screen">
-      <h1 className="screen-title">For The Kids</h1>
-      <Mascot mood="idle" />
-    </main>
-  )
-}
-
 export default function App() {
   return (
     <AppStateProvider>
@@ -43,7 +36,10 @@ export default function App() {
           <div className="sky" />
           <Clouds />
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<WhoIsPlaying />} />
+            <Route path="/grown-ups" element={<ParentGate />} />
+            <Route path="/grown-ups/edit/:id?" element={<ProfileEditor />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>
       </BrowserRouter>

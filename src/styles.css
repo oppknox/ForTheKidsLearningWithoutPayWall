@@ -305,3 +305,209 @@ button {
     animation: none !important;
   }
 }
+
+/* ---------- Who's playing ---------- */
+
+.avatar-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.avatar-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 18px 22px;
+  background: var(--paper);
+  border: none;
+  border-radius: 28px;
+  box-shadow: 0 6px 0 rgba(58, 52, 80, 0.15), 0 10px 18px rgba(58, 52, 80, 0.12);
+  cursor: pointer;
+  transition: transform 0.1s ease;
+  font-family: var(--font);
+}
+
+.avatar-card:hover {
+  transform: translateY(-4px) rotate(-1deg);
+}
+
+.avatar-card:active {
+  transform: translateY(3px) scale(0.96);
+}
+
+.avatar-card:focus-visible {
+  outline: 4px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.avatar-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.avatar-stars {
+  font-size: 1.05rem;
+  color: var(--ink);
+  opacity: 0.8;
+}
+
+/* ---------- Parent gate + management ---------- */
+
+.gate-form {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.gate-input {
+  font-family: var(--font);
+  font-size: 1.6rem;
+  padding: 12px 16px;
+  width: 140px;
+  text-align: center;
+  border: 3px solid var(--ink);
+  border-radius: 18px;
+  background: #fff;
+  color: var(--ink);
+}
+
+.name-input {
+  width: min(320px, 80vw);
+}
+
+.manage-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(560px, 100%);
+}
+
+.manage-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--paper);
+  border-radius: 20px;
+  padding: 10px 16px;
+  box-shadow: 0 4px 10px rgba(58, 52, 80, 0.12);
+}
+
+.manage-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  font-size: 1.05rem;
+}
+
+.manage-edit,
+.manage-delete {
+  font-family: var(--font);
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.manage-edit {
+  background: var(--ocean);
+  color: #fff;
+}
+
+.manage-delete {
+  background: #eee;
+  color: var(--ink);
+}
+
+.mute-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 1.05rem;
+  background: var(--paper);
+  padding: 10px 18px;
+  border-radius: 16px;
+}
+
+.mute-row input {
+  width: 22px;
+  height: 22px;
+}
+
+/* ---------- Profile editor ---------- */
+
+.editor-preview {
+  background: var(--paper);
+  border-radius: 50%;
+  padding: 14px;
+  box-shadow: 0 6px 14px rgba(58, 52, 80, 0.15);
+}
+
+.editor-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.editor-label {
+  font-size: 1.15rem;
+  opacity: 0.85;
+}
+
+.swatch-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.swatch {
+  min-width: 56px;
+  min-height: 56px;
+  border: 4px solid transparent;
+  border-radius: 18px;
+  background: var(--paper);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--ink);
+  padding: 4px;
+}
+
+.swatch.selected {
+  border-color: var(--ink);
+  transform: scale(1.08);
+}
+
+.swatch:focus-visible {
+  outline: 4px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.color-swatch {
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+}
+
+.swatch-text {
+  font-size: 1.6rem;
+  opacity: 0.6;
+}
+
+.editor-actions {
+  display: flex;
+  gap: 14px;
+  padding-bottom: 30px;
+}
