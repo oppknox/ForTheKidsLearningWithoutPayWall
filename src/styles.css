@@ -891,3 +891,70 @@ button {
 .dot-dim {
   opacity: 0.35;
 }
+
+/* ---------- Letter Land ---------- */
+
+.letter-display {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.letter-big {
+  font-size: 5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.letter-word {
+  font-size: 1.4rem;
+}
+
+.parade-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background: var(--paper);
+  border-radius: 34px;
+  padding: 30px 60px;
+  box-shadow: 0 8px 0 rgba(58, 52, 80, 0.15), 0 14px 22px rgba(58, 52, 80, 0.15);
+}
+
+.parade-letter {
+  font-size: 7rem;
+  font-weight: 700;
+  line-height: 1;
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+
+.parade-lower {
+  font-size: 4.4rem;
+  opacity: 0.75;
+}
+
+.parade-emoji {
+  font-size: 4rem;
+}
+
+.parade-word {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.parade-dots {
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+  max-width: 90vw;
+  text-align: center;
+}
+
+.dot-on {
+  color: var(--coral);
+}
+
+.dot-off {
+  color: rgba(58, 52, 80, 0.25);
+}

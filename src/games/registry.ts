@@ -28,8 +28,11 @@ export const STICKER_POOL: string[] = [
   '🦁', '⛵', '🎪', '🐧', '🌟', '🪁', '🦜', '🏆',
 ]
 
-/** Populated by each world's game modules (registered in gameList.ts). */
-export const GAMES: GameDef[] = []
+import letterPop from './letters/letterPop'
+import letterMatch from './letters/letterMatch'
+import alphabetParade from './letters/alphabetParade'
+
+export const GAMES: GameDef[] = [letterPop, letterMatch, alphabetParade]
 
 export function gamesForWorld(w: WorldId): GameDef[] {
   return GAMES.filter((g) => g.world === w)
