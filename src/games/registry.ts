@@ -13,12 +13,12 @@ export const WORLDS: Record<
   numbers: {
     title: 'Number Ocean',
     emoji: '🐠',
-    tagline: 'Count and add with splashy friends!',
+    tagline: 'Count, add, find shapes, and spot patterns!',
   },
   multiplication: {
-    title: 'Multiplication Mountain',
+    title: 'Math Mountain',
     emoji: '🏔️',
-    tagline: 'Climb to times-table triumph!',
+    tagline: 'Master multiplication, fractions, time, and problem solving!',
   },
 }
 
@@ -52,18 +52,18 @@ export const GAMES: GameDef[] = [
   alphabetParade,
   wordBuilder,
   rhymeTime,
-  shapeSafari,
   soundGarden,
   countTheFish,
   bubbleAddition,
   numberLineFrog,
+  shapeSafari,
   patternParade,
-  clockworkCastle,
-  storyProblemTheater,
   timesTableGarden,
   arrayBuilder,
   rocketRace,
   fractionPizza,
+  clockworkCastle,
+  storyProblemTheater,
 ]
 
 export function gamesForWorld(w: WorldId): GameDef[] {

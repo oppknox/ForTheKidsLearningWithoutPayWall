@@ -34,7 +34,7 @@ function Display({ round }: DisplayProps) {
 }
 
 const clockworkCastle: GameDef = {
-  id: 'clockworkCastle', world: 'numbers', title: 'Clockwork Castle', emoji: '🕰️', ages: '7–10',
+  id: 'clockworkCastle', world: 'multiplication', title: 'Clockwork Castle', emoji: '🕰️', ages: '7–10',
   roundsPerSession: 5, generateRound: generateClockRound, Display,
 }
 

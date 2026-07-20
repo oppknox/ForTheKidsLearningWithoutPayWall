@@ -7,9 +7,9 @@ A free, ad-free, interactive learning site for kids ages 3–10. Parents create 
 profiles (stored locally in the browser — no accounts, no server, no cost), kids pick
 their avatar and play their way through three worlds:
 
-- 🎈 **Letter Land** (ages 3–6) — Letter Pop, Letter Match, Alphabet Parade, Word Builder, Rhyme Time
-- 🐠 **Number Ocean** (ages 3–7) — Count the Fish, Bubble Math, Number Line Frog
-- 🏔️ **Multiplication Mountain** (ages 7–10) — Times Table Garden, Array Builder, Rocket Race
+- 🎈 **Letter Land** (ages 3–6) — Letter Pop, Letter Match, Alphabet Parade, Word Builder, Rhyme Time, Pip's Sound Garden
+- 🐠 **Number Ocean** (ages 3–7) — Count the Fish, Bubble Math, Number Line Frog, Shape Safari, Pattern Parade
+- 🏔️ **Math Mountain** (ages 7–10) — Times Table Garden, Array Builder, Rocket Race, Clockwork Castle, Story Problem Theater, Fraction Pizza Party
 
 Each child's age tunes the experience: their recommended world leads the map,
 age-fit games are front and center (others stay open as "warm-ups" or "big kid

@@ -1,5 +1,5 @@
-const CACHE_NAME = 'pips-playground-v1'
-const APP_SHELL = ['/', '/manifest.webmanifest', '/icons/pip-192.png', '/icons/pip-512.png']
+const CACHE_NAME = 'pips-playground-v2'
+const APP_SHELL = ['/', '/manifest.webmanifest', '/favicon.png', '/icons/pip-192.png', '/icons/pip-512.png']
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)))

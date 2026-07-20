@@ -32,7 +32,7 @@ function Display({ round, hintTier }: DisplayProps) {
 }
 
 const storyProblemTheater: GameDef = {
-  id: 'storyTheater', world: 'numbers', title: 'Story Problem Theater', emoji: '🎭', ages: '7–10',
+  id: 'storyTheater', world: 'multiplication', title: 'Story Problem Theater', emoji: '🎭', ages: '7–10',
   roundsPerSession: 5, generateRound: generateStoryRound, Display,
 }
 

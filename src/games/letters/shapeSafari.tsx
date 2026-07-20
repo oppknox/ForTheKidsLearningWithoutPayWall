@@ -37,7 +37,7 @@ function Display({ round, hintTier }: DisplayProps) {
 }
 
 const shapeSafari: GameDef = {
-  id: 'shapeSafari', world: 'letters', title: 'Shape Safari', emoji: '🦊', ages: '3–6',
+  id: 'shapeSafari', world: 'numbers', title: 'Shape Safari', emoji: '🦊', ages: '3–6',
   roundsPerSession: 5, generateRound: generateShapeRound, Display,
 }
 
