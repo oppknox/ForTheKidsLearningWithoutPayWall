@@ -1,1 +1,0 @@
-This folder contains the built output assets for the worker "for-the-kids" generated at 2026-07-20T20:27:15.915Z.
