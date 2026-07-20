@@ -12,17 +12,30 @@ export function Privacy() {
         <p>
           Pip's Playground has no accounts, no sign-ups, and no passwords.
           Player profiles, stars, stickers, and progress are saved only in this
-          browser on this device. We never see them, and neither does anyone
-          else. Clearing the browser's site data erases them completely.
+          browser on this device unless you choose to turn on cloud backup
+          (see below). Clearing the browser's site data erases them completely.
+        </p>
+
+        <h2>Optional cloud backup — encrypted so we can't read it</h2>
+        <p>
+          If a grown-up turns on "Backup &amp; device sync," your family's
+          progress is encrypted <em>on your device</em> before it is uploaded.
+          Our server stores only scrambled data it cannot decrypt — the key
+          lives inside your recovery code, which only you have. We cannot read
+          your backup, recover a lost code, or connect a backup to any person.
+          You can delete the cloud backup at any time from the same screen,
+          which removes it from our server permanently. Backups are never
+          created without a grown-up setting them up.
         </p>
 
         <h2>No ads, no trackers, no analytics</h2>
         <p>
           There are no advertisements, no tracking pixels, no analytics
-          scripts, and no third-party cookies. We don't collect email
-          addresses, names, ages, or anything about your child. The name and
-          age you enter for a player exist only to personalize the games on
-          your own device.
+          scripts, and no third-party cookies. We don't require any personal
+          information — no names, ages, or email addresses ever leave your
+          device except what you choose to type into the feedback form. The
+          name and age you enter for a player exist only to personalize the
+          games on your own device.
         </p>
 
         <h2>Voices come from your device</h2>
@@ -37,8 +50,9 @@ export function Privacy() {
         <p>
           The site is served by Cloudflare, which — like any web host —
           processes standard technical request data (such as IP addresses) to
-          deliver the pages and protect against abuse. We do not use it to
-          identify or profile anyone.
+          deliver the pages and protect against abuse. Feedback messages and
+          encrypted backups are stored in a Cloudflare database. We do not use
+          any of it to identify or profile anyone.
         </p>
 
         <h2>The feedback form</h2>
