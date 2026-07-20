@@ -5,6 +5,7 @@ import { generateWordRound, type WordRound } from './wordBuilderLogic'
 import { useAppState } from '../../state/ProfilesContext'
 import { STICKER_POOL } from '../registry'
 import { newProgress, applyCorrect } from '../../lib/progress'
+import { startingLevel } from '../../lib/ageFit'
 import { Mascot, type MascotMood } from '../../components/Mascot'
 import { Confetti } from '../../components/Confetti'
 import { BigButton } from '../../components/BigButton'
@@ -27,7 +28,8 @@ function spellOut(word: string): string {
 function FreePlay() {
   const { activeProfile, dispatch } = useAppState()
   const navigate = useNavigate()
-  const level = activeProfile?.progress['wordBuilder']?.level ?? 1
+  const startLevel = activeProfile ? startingLevel(activeProfile.age, [5, 6]) : 1
+  const level = activeProfile?.progress['wordBuilder']?.level ?? startLevel
 
   const [wordsDone, setWordsDone] = useState(0)
   const [sessionStars, setSessionStars] = useState(0)
@@ -85,7 +87,7 @@ function FreePlay() {
       if (newFilled >= word.length) {
         // Word complete!
         playDing()
-        const current = activeProfile.progress['wordBuilder'] ?? newProgress()
+        const current = activeProfile.progress['wordBuilder'] ?? newProgress(startLevel)
         const result = applyCorrect(current, maxTier)
         if (result.leveledUp) {
           setLeveledUp(true)
@@ -99,6 +101,7 @@ function FreePlay() {
           gameId: 'wordBuilder',
           hintsUsed: maxTier,
           stickerPool: STICKER_POOL,
+          startLevel,
         })
         setSessionStars((s) => s + result.starsEarned)
         const isLast = wordsDone + 1 >= WORDS_PER_SESSION
@@ -121,7 +124,7 @@ function FreePlay() {
 
     // Wrong letter — escalate warmly.
     playWhoosh()
-    dispatch({ type: 'recordHint', gameId: 'wordBuilder' })
+    dispatch({ type: 'recordHint', gameId: 'wordBuilder', startLevel })
     const newTier = Math.min(tier + 1, 3)
     setTier(newTier)
     setMaxTier((m) => Math.max(m, newTier))
@@ -157,7 +160,7 @@ function FreePlay() {
               setWordsDone(0)
               setSessionStars(0)
               setFinished(false)
-              startWord(activeProfile.progress['wordBuilder']?.level ?? 1)
+              startWord(activeProfile.progress['wordBuilder']?.level ?? startLevel)
             }}
           >
             Play again!

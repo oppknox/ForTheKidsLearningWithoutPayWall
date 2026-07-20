@@ -1370,3 +1370,25 @@ button.header-chip { border: none; cursor: pointer; font-family: var(--font); }
     opacity: 0;
   }
 }
+
+/* ---------- Age-fit staging ---------- */
+
+.game-card.game-side {
+  transform: scale(0.88);
+  opacity: 0.88;
+  width: min(200px, 80vw);
+}
+
+.game-card.game-side:hover {
+  transform: scale(0.92) translateY(-3px);
+  opacity: 1;
+}
+
+.fit-badge {
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: var(--ink);
+  color: #fff;
+  border-radius: 999px;
+  padding: 4px 12px;
+}

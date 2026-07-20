@@ -11,6 +11,10 @@ their avatar and play their way through three worlds:
 - 🐠 **Number Ocean** (ages 3–7) — Count the Fish, Bubble Math, Number Line Frog
 - 🏔️ **Multiplication Mountain** (ages 7–10) — Times Table Garden, Array Builder, Rocket Race
 
+Each child's age tunes the experience: their recommended world leads the map,
+age-fit games are front and center (others stay open as "warm-ups" or "big kid
+challenges"), and first plays start at an age-appropriate difficulty level.
+
 Wrong answers never fail — they trigger escalating, spoken hints (nudge → visual
 clue → show-and-explain) and every round ends in success. Correct answers earn stars,
 streaks level you up, and level-ups unlock stickers for your sticker book.

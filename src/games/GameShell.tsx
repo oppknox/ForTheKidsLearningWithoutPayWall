@@ -5,6 +5,7 @@ import type { Round } from './types'
 import { initialRound, pick, type RoundState } from './hintMachine'
 import { useAppState } from '../state/ProfilesContext'
 import { newProgress, applyCorrect } from '../lib/progress'
+import { parseAges, startingLevel } from '../lib/ageFit'
 import { STICKER_POOL, WORLDS } from './registry'
 import { Mascot, type MascotMood } from '../components/Mascot'
 import { Confetti } from '../components/Confetti'
@@ -31,7 +32,10 @@ export function GameShell({ game }: { game: GameDef }) {
   const [leveledUp, setLeveledUp] = useState(false)
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
-  const level = activeProfile?.progress[game.id]?.level ?? 1
+  const startLevel = activeProfile
+    ? startingLevel(activeProfile.age, parseAges(game.ages))
+    : 1
+  const level = activeProfile?.progress[game.id]?.level ?? startLevel
 
   const startRound = useCallback(
     (roundIndex: number, sessionStars: number): SessionState => ({
@@ -83,7 +87,7 @@ export function GameShell({ game }: { game: GameDef }) {
     if (next.solved) {
       const hintsUsed = rs.hintTier
       playDing()
-      const current = activeProfile.progress[game.id] ?? newProgress()
+      const current = activeProfile.progress[game.id] ?? newProgress(startLevel)
       const result = applyCorrect(current, hintsUsed)
       if (result.leveledUp) {
         const sticker = STICKER_POOL.find((s) => !activeProfile.stickers.includes(s)) ?? null
@@ -100,6 +104,7 @@ export function GameShell({ game }: { game: GameDef }) {
         gameId: game.id,
         hintsUsed,
         stickerPool: STICKER_POOL,
+        startLevel,
       })
       const isLast = session.roundIndex + 1 >= game.roundsPerSession
       setSession({ ...session, rs: next, sessionStars: session.sessionStars + result.starsEarned })
@@ -120,7 +125,7 @@ export function GameShell({ game }: { game: GameDef }) {
 
     // A miss — escalate warmly.
     playWhoosh()
-    dispatch({ type: 'recordHint', gameId: game.id })
+    dispatch({ type: 'recordHint', gameId: game.id, startLevel })
     if (next.hintTier === 1) speak(`${pickEncourage()} ${round.hints.nudge}`)
     else if (next.hintTier === 2) speak(pickEncourage())
     else speak(round.hints.explain)
