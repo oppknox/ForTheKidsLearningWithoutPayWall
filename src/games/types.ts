@@ -1,0 +1,43 @@
+import type { ComponentType } from 'react'
+import type { WorldId } from '../types'
+
+export interface Hints {
+  /** Tier 1: spoken encouragement + a restated clue. */
+  nudge: string
+  /** Tier 3: spoken explanation shown alongside the revealed answer. */
+  explain: string
+}
+
+export interface Choice {
+  id: string
+  label: string
+}
+
+export interface Round {
+  promptText: string
+  promptSpeech: string
+  choices: Choice[]
+  answerId: string
+  hints: Hints
+  /** Game-specific display data (fish count, factors, balloon flag...). */
+  payload?: unknown
+}
+
+export interface DisplayProps {
+  round: Round
+  hintTier: number
+}
+
+export interface GameDef {
+  id: string
+  world: WorldId
+  title: string
+  emoji: string
+  ages: string
+  roundsPerSession: number
+  generateRound(level: number): Round
+  /** Scene rendered above the answer choices. */
+  Display?: ComponentType<DisplayProps>
+  /** Non-quiz games (Alphabet Parade) render this instead of the quiz shell. */
+  FreePlay?: ComponentType
+}
