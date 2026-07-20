@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { loadState, saveState, STORAGE_KEY } from './storage'
+import { loadState, saveState, normalizeState, STORAGE_KEY } from './storage'
 import { DEFAULT_STATE, type AppState } from '../types'
 
 const sampleState: AppState = {
@@ -57,6 +57,19 @@ describe('storage', () => {
     const loaded = loadState()
     expect(loaded.muted).toBe(true)
     expect(loaded.voiceName).toBeNull()
+  })
+
+  it('normalizeState accepts real backups and rejects malformed ones', () => {
+    expect(normalizeState(sampleState)).toEqual(sampleState)
+    expect(normalizeState(null)).toBeNull()
+    expect(normalizeState({ profiles: 'nope' })).toBeNull()
+    expect(
+      normalizeState({
+        profiles: [{ ...sampleState.profiles[0], age: 99 }],
+        activeProfileId: null,
+        muted: false,
+      }),
+    ).toBeNull()
   })
 
   it('saveState never throws when setItem throws', () => {
