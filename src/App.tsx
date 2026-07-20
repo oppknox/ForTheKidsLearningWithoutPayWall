@@ -8,6 +8,7 @@ import { WorldMap } from './screens/WorldMap'
 import { WorldScreen } from './screens/WorldScreen'
 import { StickerBook } from './screens/StickerBook'
 import { gameById } from './games/registry'
+import { GameShell } from './games/GameShell'
 
 function Clouds() {
   const clouds = [
@@ -55,8 +56,8 @@ function GameRoute() {
   const { gameId } = useParams()
   const game = gameId ? gameById(gameId) : undefined
   if (!game) return <Navigate to="/play" replace />
-  // GameShell arrives in the next task; placeholder keeps routing honest.
-  return <main className="screen">{game.title}</main>
+  if (game.FreePlay) return <game.FreePlay />
+  return <GameShell key={game.id} game={game} />
 }
 
 export default function App() {
