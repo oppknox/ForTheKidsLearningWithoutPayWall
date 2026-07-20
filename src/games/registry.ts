@@ -37,14 +37,18 @@ import arrayBuilder from './multiplication/arrayBuilder'
 import rocketRace from './multiplication/rocketRace'
 import wordBuilder from './letters/wordBuilder'
 import timesTableGarden from './multiplication/timesTableGarden'
+import rhymeTime from './letters/rhymeTime'
+import numberLineFrog from './numbers/numberLineFrog'
 
 export const GAMES: GameDef[] = [
   letterPop,
   letterMatch,
   alphabetParade,
   wordBuilder,
+  rhymeTime,
   countTheFish,
   bubbleAddition,
+  numberLineFrog,
   timesTableGarden,
   arrayBuilder,
   rocketRace,

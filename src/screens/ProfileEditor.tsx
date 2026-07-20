@@ -15,6 +15,10 @@ const CREATURES: { id: Creature; label: string }[] = [
 ]
 
 const COLORS = ['#f4813f', '#5cc46a', '#2aa7de', '#8e6fd8', '#ff5f9e', '#ffc93c', '#9aa4b2']
+const COLOR_NAMES: Record<string, string> = {
+  '#f4813f': 'Orange', '#5cc46a': 'Green', '#2aa7de': 'Blue', '#8e6fd8': 'Purple',
+  '#ff5f9e': 'Pink', '#ffc93c': 'Yellow', '#9aa4b2': 'Gray',
+}
 
 const ACCESSORIES: { id: Accessory; label: string }[] = [
   { id: 'none', label: 'Nothing' },
@@ -71,6 +75,7 @@ export function ProfileEditor() {
               key={n}
               className={`swatch age-swatch ${age === n ? 'selected' : ''}`}
               onClick={() => setAge(n)}
+              aria-pressed={age === n}
             >
               {n}
             </button>
@@ -87,6 +92,7 @@ export function ProfileEditor() {
               className={`swatch creature-swatch ${avatar.creature === c.id ? 'selected' : ''}`}
               onClick={() => setAvatar({ ...avatar, creature: c.id })}
               aria-label={c.label}
+              aria-pressed={avatar.creature === c.id}
             >
               <AvatarSVG config={{ ...avatar, creature: c.id }} size={56} />
             </button>
@@ -103,7 +109,8 @@ export function ProfileEditor() {
               className={`swatch color-swatch ${avatar.color === c ? 'selected' : ''}`}
               style={{ background: c }}
               onClick={() => setAvatar({ ...avatar, color: c })}
-              aria-label={`Color ${c}`}
+              aria-label={COLOR_NAMES[c]}
+              aria-pressed={avatar.color === c}
             />
           ))}
         </div>
@@ -118,6 +125,7 @@ export function ProfileEditor() {
               className={`swatch creature-swatch ${avatar.accessory === a.id ? 'selected' : ''}`}
               onClick={() => setAvatar({ ...avatar, accessory: a.id })}
               aria-label={a.label}
+              aria-pressed={avatar.accessory === a.id}
             >
               {a.id === 'none' ? (
                 <span className="swatch-text">—</span>

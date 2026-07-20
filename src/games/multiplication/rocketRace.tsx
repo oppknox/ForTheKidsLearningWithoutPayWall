@@ -20,12 +20,18 @@ function generateRound(level: number): Round {
   }
 }
 
-function Display({ round }: DisplayProps) {
+function Display({ round, solved }: DisplayProps) {
   void round
   return (
-    <div className="rocket-scene">
+    <div className={`rocket-scene ${solved ? 'blastoff' : ''}`}>
       <span className="rocket">🚀</span>
       <span className="rocket-flame">🔥</span>
+      {solved && (
+        <>
+          <span className="rocket-trail" style={{ animationDelay: '0.05s' }}>💨</span>
+          <span className="rocket-trail" style={{ animationDelay: '0.2s' }}>✨</span>
+        </>
+      )}
     </div>
   )
 }
