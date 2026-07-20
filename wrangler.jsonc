@@ -1,6 +1,13 @@
 {
   "name": "for-the-kids",
   "compatibility_date": "2026-07-01",
+  "workers_dev": true,
+  "routes": [
+    { "pattern": "freekidslearning.com", "custom_domain": true },
+    { "pattern": "www.freekidslearning.com", "custom_domain": true },
+    { "pattern": "pipsplayground.com", "custom_domain": true },
+    { "pattern": "www.pipsplayground.com", "custom_domain": true }
+  ],
   "assets": {
     "directory": "./dist",
     "not_found_handling": "single-page-application"

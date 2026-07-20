@@ -1,6 +1,7 @@
 # For The Kids — Learning Without a Paywall
 
-**Live at: https://for-the-kids.seanknox.workers.dev**
+**Live at: https://pipsplayground.com and https://freekidslearning.com**
+(also https://for-the-kids.seanknox.workers.dev)
 
 A free, ad-free, interactive learning site for kids ages 3–10. Parents create child
 profiles (stored locally in the browser — no accounts, no server, no cost), kids pick
