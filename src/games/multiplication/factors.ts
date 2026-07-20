@@ -31,5 +31,7 @@ export function productChoices(a: number, b: number): number[] {
     if (options.size >= 3) break
     if (c > 0 && !options.has(c)) options.add(c)
   }
+  // Tiny facts like 1×1 starve the near-miss pool — pad upward so there are always 3.
+  for (let pad = 1; options.size < 3; pad++) options.add(product + pad)
   return [...options]
 }
