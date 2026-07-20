@@ -6,6 +6,7 @@ import { BigButton } from '../components/BigButton'
 import { randInt } from '../lib/rng'
 import { InstallApp } from '../components/InstallApp'
 import { VoicePicker } from '../components/VoicePicker'
+import { SiteFooter } from '../components/SiteFooter'
 
 const GATE_KEY = 'ftk-gate-ok'
 const GATE_TTL_MS = 10 * 60 * 1000
@@ -133,6 +134,7 @@ function GrownUps() {
       </label>
       <VoicePicker />
       <InstallApp />
+      <SiteFooter />
     </main>
   )
 }

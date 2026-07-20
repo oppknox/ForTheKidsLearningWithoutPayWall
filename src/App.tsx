@@ -4,6 +4,8 @@ import { AppStateProvider, useAppState } from './state/ProfilesContext'
 import { WhoIsPlaying } from './screens/WhoIsPlaying'
 import { ParentGate } from './screens/ParentGate'
 import { ProfileEditor } from './screens/ProfileEditor'
+import { Privacy } from './screens/Privacy'
+import { WhatsNew } from './screens/WhatsNew'
 import { WorldMap } from './screens/WorldMap'
 import { WorldScreen } from './screens/WorldScreen'
 import { StickerBook } from './screens/StickerBook'
@@ -70,6 +72,8 @@ export default function App() {
           <Routes>
             <Route path="/" element={<WhoIsPlaying />} />
             <Route path="/grown-ups" element={<ParentGate />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/whats-new" element={<WhatsNew />} />
             <Route path="/grown-ups/edit/:id?" element={<ProfileEditor />} />
             <Route path="/play" element={<RequireKid><WorldMap /></RequireKid>} />
             <Route path="/world/:worldId" element={<RequireKid><WorldScreen /></RequireKid>} />

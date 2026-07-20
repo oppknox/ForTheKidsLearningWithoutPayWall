@@ -5,6 +5,7 @@ import { Mascot } from '../components/Mascot'
 import { BigButton } from '../components/BigButton'
 import { speak } from '../lib/speech'
 import { playPop } from '../lib/sfx'
+import { SiteFooter } from '../components/SiteFooter'
 
 export function WhoIsPlaying() {
   const { state, dispatch } = useAppState()
@@ -48,6 +49,7 @@ export function WhoIsPlaying() {
       <BigButton color="var(--leaf)" onClick={() => navigate('/grown-ups')}>
         {state.profiles.length === 0 ? 'Grown-ups: get started' : 'Grown-ups'}
       </BigButton>
+      <SiteFooter />
     </main>
   )
 }
