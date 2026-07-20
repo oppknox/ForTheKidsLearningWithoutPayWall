@@ -99,6 +99,47 @@ describe('recordCorrect', () => {
   })
 })
 
+describe('age-seeded starting levels', () => {
+  it('recordCorrect seeds first-play progress at the given startLevel', () => {
+    const s = reducer(stateWithChild(), {
+      type: 'recordCorrect',
+      gameId: 'bubbleAdd',
+      hintsUsed: 0,
+      stickerPool: [],
+      startLevel: 4,
+    })
+    expect(s.profiles[0].progress.bubbleAdd.level).toBe(4)
+    expect(s.profiles[0].progress.bubbleAdd.streak).toBe(1)
+  })
+
+  it('recordHint seeds first-play progress at the given startLevel', () => {
+    const s = reducer(stateWithChild(), {
+      type: 'recordHint',
+      gameId: 'bubbleAdd',
+      startLevel: 3,
+    })
+    expect(s.profiles[0].progress.bubbleAdd.level).toBe(3)
+  })
+
+  it('startLevel never overrides existing progress', () => {
+    let s = reducer(stateWithChild(), {
+      type: 'recordCorrect',
+      gameId: 'bubbleAdd',
+      hintsUsed: 0,
+      stickerPool: [],
+      startLevel: 2,
+    })
+    s = reducer(s, {
+      type: 'recordCorrect',
+      gameId: 'bubbleAdd',
+      hintsUsed: 0,
+      stickerPool: [],
+      startLevel: 4,
+    })
+    expect(s.profiles[0].progress.bubbleAdd.level).toBe(2)
+  })
+})
+
 describe('recordHint', () => {
   it('resets the streak for that game', () => {
     let s = reducer(stateWithChild(), {

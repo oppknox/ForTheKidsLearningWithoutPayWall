@@ -9,8 +9,12 @@ export interface AnswerResult {
   starsEarned: number
 }
 
-export function newProgress(): SkillProgress {
-  return { level: 1, streak: 0, totalCorrect: 0 }
+export function newProgress(startLevel = 1): SkillProgress {
+  return {
+    level: Math.min(Math.max(startLevel, 1), MAX_LEVEL),
+    streak: 0,
+    totalCorrect: 0,
+  }
 }
 
 export function applyCorrect(p: SkillProgress, hintsUsed: number): AnswerResult {

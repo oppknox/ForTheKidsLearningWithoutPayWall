@@ -26,7 +26,11 @@ export function WorldMap() {
 
   if (!activeProfile) return null // router redirects; belt-and-suspenders
 
-  const worldIds = Object.keys(WORLDS) as WorldId[]
+  // Recommended world leads; the rest keep their canonical order.
+  const recommended = recommendedWorld(activeProfile.age)
+  const worldIds = (Object.keys(WORLDS) as WorldId[]).sort(
+    (a, b) => Number(b === recommended) - Number(a === recommended),
+  )
 
   return (
     <main className="screen">
@@ -60,7 +64,7 @@ export function WorldMap() {
               navigate(`/world/${id}`)
             }}
           >
-            {id === recommendedWorld(activeProfile.age) && (
+            {id === recommended && (
               <span className="recommend-badge">Great place to start!</span>
             )}
             <span className="world-emoji">{WORLDS[id].emoji}</span>

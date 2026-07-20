@@ -6,8 +6,15 @@ export type Action =
   | { type: 'updateProfile'; id: string; patch: Partial<Pick<Profile, 'name' | 'age' | 'avatar'>> }
   | { type: 'deleteProfile'; id: string }
   | { type: 'selectProfile'; id: string | null }
-  | { type: 'recordCorrect'; gameId: string; hintsUsed: number; stickerPool: string[] }
-  | { type: 'recordHint'; gameId: string }
+  | {
+      type: 'recordCorrect'
+      gameId: string
+      hintsUsed: number
+      stickerPool: string[]
+      /** Age-seeded level for a game's very first play; ignored once progress exists. */
+      startLevel?: number
+    }
+  | { type: 'recordHint'; gameId: string; startLevel?: number }
   | { type: 'setMuted'; muted: boolean }
 
 function updateActive(s: AppState, fn: (p: Profile) => Profile): AppState {
@@ -47,7 +54,7 @@ export function reducer(s: AppState, a: Action): AppState {
       return { ...s, activeProfileId: a.id }
     case 'recordCorrect':
       return updateActive(s, (p) => {
-        const current = p.progress[a.gameId] ?? newProgress()
+        const current = p.progress[a.gameId] ?? newProgress(a.startLevel)
         const result = applyCorrect(current, a.hintsUsed)
         let stickers = p.stickers
         if (result.leveledUp) {
@@ -63,7 +70,7 @@ export function reducer(s: AppState, a: Action): AppState {
       })
     case 'recordHint':
       return updateActive(s, (p) => {
-        const current = p.progress[a.gameId] ?? newProgress()
+        const current = p.progress[a.gameId] ?? newProgress(a.startLevel)
         return { ...p, progress: { ...p.progress, [a.gameId]: applyHint(current) } }
       })
     case 'setMuted':
