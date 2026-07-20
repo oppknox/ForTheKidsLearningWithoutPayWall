@@ -1252,18 +1252,53 @@ button.header-chip { border: none; cursor: pointer; font-family: var(--font); }
   flex-wrap: wrap;
   gap: 8px;
   max-width: 360px;
-  font-size: 4rem;
 }
 
-.pizza-parts span:not(.topped) { color: #d7b36a; font-size: 3.2rem; }
 .pizza-parts strong { width: 100%; text-align: center; font-size: 1.2rem; }
+
+.pizza-slice {
+  width: 68px;
+  height: 76px;
+  position: relative;
+  display: inline-block;
+  background: #f5d88a;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  filter: drop-shadow(0 4px 0 #c58a3d);
+}
+
+.pizza-slice::after {
+  content: '';
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 5px;
+  height: 10px;
+  border-radius: 8px;
+  background: #b87532;
+}
+
+.pizza-slice.topped { background: #f2bd45; }
+
+.pepperoni,
+.pepperoni::before,
+.pepperoni::after {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--coral-deep);
+}
+
+.pepperoni { left: 28px; top: 34px; }
+.pepperoni::before { content: ''; left: -15px; top: 18px; }
+.pepperoni::after { content: ''; left: 15px; top: 18px; }
 
 @media (max-width: 520px) {
   .learning-clock { width: 180px; height: 180px; }
   .clock-hand.hour { height: 50px; }
   .clock-hand.minute { height: 68px; }
   .story-stage { min-width: 0; gap: 8px; font-size: 1.8rem; }
-  .pizza-parts { font-size: 3rem; }
+  .pizza-slice { width: 58px; height: 66px; }
 }
 
 @keyframes flicker {
@@ -1518,4 +1553,45 @@ button.header-chip { border: none; cursor: pointer; font-family: var(--font); }
   color: #fff;
   border-radius: 999px;
   padding: 4px 12px;
+}
+
+/* ---------- Voice picker + install steps ---------- */
+
+.voice-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--paper);
+  border-radius: 20px;
+  padding: 16px 20px;
+  width: min(560px, 100%);
+  font-size: 1.02rem;
+}
+
+.voice-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.voice-select {
+  font-family: var(--font);
+  font-size: 1.05rem;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 3px solid var(--ink);
+  background: #fff;
+  color: var(--ink);
+  max-width: 100%;
+  flex: 1;
+  min-width: 220px;
+}
+
+.install-steps {
+  margin: 8px 0 0 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 1.02rem;
 }

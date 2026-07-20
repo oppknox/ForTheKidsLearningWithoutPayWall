@@ -24,7 +24,30 @@ function selectVoice(): SpeechSynthesisVoice | null {
   }
 }
 
+let chosenVoiceName: string | null = null
+
+/** Parent-chosen OS voice by name; null returns to automatic selection. */
+export function setPreferredVoiceName(name: string | null): void {
+  chosenVoiceName = name
+}
+
+/** English voices installed on this device (empty until the OS reports them). */
+export function getEnglishVoices(): SpeechSynthesisVoice[] {
+  try {
+    return (window.speechSynthesis?.getVoices() ?? []).filter((v) =>
+      v.lang.toLowerCase().startsWith('en'),
+    )
+  } catch {
+    return []
+  }
+}
+
 function getPreferredVoice(): SpeechSynthesisVoice | null {
+  if (chosenVoiceName) {
+    const chosen = getEnglishVoices().find((v) => v.name === chosenVoiceName)
+    if (chosen) return chosen
+    // Chosen on another device or voice was removed — fall back to automatic.
+  }
   preferredVoice = selectVoice() ?? preferredVoice
   return preferredVoice
 }

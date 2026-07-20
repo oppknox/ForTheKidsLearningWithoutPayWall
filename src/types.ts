@@ -29,10 +29,13 @@ export interface AppState {
   profiles: Profile[]
   activeProfileId: string | null
   muted: boolean
+  /** OS voice chosen by the parent; null = automatic best available. */
+  voiceName: string | null
 }
 
 export const DEFAULT_STATE: AppState = {
   profiles: [],
   activeProfileId: null,
   muted: false,
+  voiceName: null,
 }

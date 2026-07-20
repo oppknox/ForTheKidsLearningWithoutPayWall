@@ -16,6 +16,7 @@ export type Action =
     }
   | { type: 'recordHint'; gameId: string; startLevel?: number }
   | { type: 'setMuted'; muted: boolean }
+  | { type: 'setVoice'; voiceName: string | null }
 
 function updateActive(s: AppState, fn: (p: Profile) => Profile): AppState {
   if (!s.activeProfileId) return s
@@ -75,5 +76,7 @@ export function reducer(s: AppState, a: Action): AppState {
       })
     case 'setMuted':
       return { ...s, muted: a.muted }
+    case 'setVoice':
+      return { ...s, voiceName: a.voiceName }
   }
 }

@@ -55,4 +55,16 @@ describe('new game round generators', () => {
       }
     })
   }
+
+  it('uses child-friendly singular grammar for one topped slice', () => {
+    for (let i = 0; i < 200; i++) {
+      const round = generateFractionRound(1)
+      const payload = round.payload as { n: number }
+      if (payload.n === 1) {
+        expect(round.hints.nudge).toContain('1 slice has toppings')
+        return
+      }
+    }
+    throw new Error('Expected to generate a one-slice fraction')
+  })
 })

@@ -7,7 +7,7 @@ import {
 } from 'react'
 import type { AppState, Profile } from '../types'
 import { loadState, saveState } from '../lib/storage'
-import { setSpeechMuted } from '../lib/speech'
+import { setSpeechMuted, setPreferredVoiceName } from '../lib/speech'
 import { setSfxMuted } from '../lib/sfx'
 import { reducer, type Action } from './reducer'
 
@@ -26,6 +26,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     saveState(state)
     setSpeechMuted(state.muted)
     setSfxMuted(state.muted)
+    setPreferredVoiceName(state.voiceName)
   }, [state])
 
   const activeProfile =
