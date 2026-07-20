@@ -1,0 +1,35 @@
+# For The Kids — Learning Without a Paywall
+
+A free, ad-free, interactive learning site for kids ages 3–10. Parents create child
+profiles (stored locally in the browser — no accounts, no server, no cost), kids pick
+their avatar and play their way through three worlds:
+
+- 🎈 **Letter Land** (ages 3–6) — Letter Pop, Letter Match, Alphabet Parade
+- 🐠 **Number Ocean** (ages 3–7) — Count the Fish, Bubble Math
+- 🏔️ **Multiplication Mountain** (ages 7–10) — Array Builder, Rocket Race
+
+Wrong answers never fail — they trigger escalating, spoken hints (nudge → visual
+clue → show-and-explain) and every round ends in success. Correct answers earn stars,
+streaks level you up, and level-ups unlock stickers for your sticker book.
+
+Everything important is read aloud (Web Speech API) so pre-readers can play solo,
+with cheerful synthesized sound effects. A mute toggle lives in the Grown-Ups area,
+which is protected by a multiplication question little fingers can't solve.
+
+## Run it
+
+```bash
+npm install
+npm run dev      # local dev server
+npm test         # unit tests (round generators, progression, hints, storage)
+npm run build    # production build in dist/
+```
+
+The production build in `dist/` is fully static — host it anywhere free
+(Cloudflare Pages, Netlify, GitHub Pages).
+
+## Roadmap
+
+The design spec — including 25+ future game ideas grouped by age bracket and the
+plan for real parent logins with cloud sync — lives in
+[docs/superpowers/specs/2026-07-19-kids-learning-site-design.md](docs/superpowers/specs/2026-07-19-kids-learning-site-design.md).
