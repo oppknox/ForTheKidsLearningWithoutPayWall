@@ -11,6 +11,7 @@ import { Confetti } from '../components/Confetti'
 import { BigButton } from '../components/BigButton'
 import { speak } from '../lib/speech'
 import { playDing, playFanfare, playPop, playWhoosh } from '../lib/sfx'
+import { SoundToggle } from '../components/SoundToggle'
 
 const NEXT_ROUND_DELAY = 1400
 
@@ -57,6 +58,15 @@ export function GameShell({ game }: { game: GameDef }) {
 
   const { round, rs } = session
   const tier = rs.hintTier
+  const statusMessage = session.finished
+    ? `Session complete. You earned ${session.sessionStars} stars.`
+    : rs.solved
+      ? 'Correct! Great job!'
+      : tier === 1
+        ? round.hints.nudge
+        : tier >= 3
+          ? round.hints.explain
+          : ''
 
   const mood: MascotMood = session.finished
     ? 'celebrate'
@@ -163,7 +173,10 @@ export function GameShell({ game }: { game: GameDef }) {
             </span>
           ))}
         </span>
+        <SoundToggle />
       </header>
+
+      <p className="sr-only" role="status" aria-live="polite">{statusMessage}</p>
 
       {leveledUp && (
         <div className="levelup-banner">

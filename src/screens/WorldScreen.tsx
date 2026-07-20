@@ -5,6 +5,7 @@ import { MAX_LEVEL } from '../lib/progress'
 import type { WorldId } from '../types'
 import { playPop } from '../lib/sfx'
 import { speak } from '../lib/speech'
+import { SoundToggle } from '../components/SoundToggle'
 
 export function WorldScreen() {
   const { worldId } = useParams()
@@ -23,6 +24,7 @@ export function WorldScreen() {
           ⬅ Worlds
         </Link>
         <span className="header-chip">⭐ {activeProfile.stars}</span>
+        <SoundToggle />
       </header>
 
       <h1 className="screen-title">
@@ -32,6 +34,7 @@ export function WorldScreen() {
       <div className="game-grid">
         {games.map((g) => {
           const level = activeProfile.progress[g.id]?.level ?? 1
+          const hasPlayed = Boolean(activeProfile.progress[g.id]?.totalCorrect)
           return (
             <button
               key={g.id}
@@ -42,6 +45,7 @@ export function WorldScreen() {
                 navigate(`/game/${g.id}`)
               }}
             >
+              {!hasPlayed && g === games[0] && <span className="recommend-badge">Start here</span>}
               <span className="game-emoji">{g.emoji}</span>
               <span className="game-title">{g.title}</span>
               <span className="game-level">

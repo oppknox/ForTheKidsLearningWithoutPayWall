@@ -6,11 +6,18 @@ import { WORLDS } from '../games/registry'
 import type { WorldId } from '../types'
 import { playPop } from '../lib/sfx'
 import { speak } from '../lib/speech'
+import { SoundToggle } from '../components/SoundToggle'
 
 const WORLD_COLORS: Record<WorldId, string> = {
   letters: 'linear-gradient(135deg, #ffb86b, #ff7b54)',
   numbers: 'linear-gradient(135deg, #6fd3ff, #2aa7de)',
   multiplication: 'linear-gradient(135deg, #b39ce8, #8e6fd8)',
+}
+
+function recommendedWorld(age: number): WorldId {
+  if (age <= 5) return 'letters'
+  if (age <= 7) return 'numbers'
+  return 'multiplication'
 }
 
 export function WorldMap() {
@@ -32,9 +39,14 @@ export function WorldMap() {
         <Link to="/stickers" className="header-chip">
           📖 Stickers
         </Link>
+        <SoundToggle />
       </header>
 
-      <h1 className="screen-title">Pick a world!</h1>
+      <h1 className="screen-title">Where should we play?</h1>
+
+      <p className="screen-subtitle">
+        We recommend a starting place for age {activeProfile.age}, but every world is open.
+      </p>
 
       <div className="world-grid">
         {worldIds.map((id) => (
@@ -48,6 +60,9 @@ export function WorldMap() {
               navigate(`/world/${id}`)
             }}
           >
+            {id === recommendedWorld(activeProfile.age) && (
+              <span className="recommend-badge">Great place to start!</span>
+            )}
             <span className="world-emoji">{WORLDS[id].emoji}</span>
             <span className="world-title">{WORLDS[id].title}</span>
             <span className="world-tagline">{WORLDS[id].tagline}</span>

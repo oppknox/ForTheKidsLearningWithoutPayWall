@@ -145,6 +145,30 @@ button {
   opacity: 0.85;
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.welcome-card {
+  width: min(560px, 100%);
+  padding: 20px 24px;
+  text-align: center;
+  background: var(--paper);
+  border-radius: 26px;
+  box-shadow: 0 6px 14px rgba(58, 52, 80, 0.14);
+}
+
+.welcome-card h2 { margin-bottom: 8px; }
+.trust-list { list-style: none; margin-top: 14px; display: grid; gap: 6px; font-weight: 700; }
+
 /* ---------- Candy buttons (signature) ---------- */
 
 .big-btn {
@@ -302,6 +326,11 @@ button {
   .cloud,
   .confetti-piece,
   .squash {
+    animation: none !important;
+  }
+
+  .balloon-btn, .fish, .bubble, .rocket-scene, .rocket-flame, .sticker,
+  .levelup-banner, .choice-btn, .gem, .gem-running {
     animation: none !important;
   }
 }
@@ -538,6 +567,18 @@ button {
   box-shadow: 0 3px 8px rgba(58, 52, 80, 0.15);
 }
 
+button.header-chip { border: none; cursor: pointer; font-family: var(--font); }
+
+.header-chip:focus-visible,
+.manage-edit:focus-visible,
+.manage-delete:focus-visible,
+.mute-row input:focus-visible {
+  outline: 4px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.sound-toggle { min-width: 130px; justify-content: center; }
+
 /* ---------- World map ---------- */
 
 .world-grid {
@@ -562,6 +603,17 @@ button {
   box-shadow: 0 8px 0 rgba(58, 52, 80, 0.25), 0 12px 20px rgba(58, 52, 80, 0.2);
   transition: transform 0.12s ease;
   font-family: var(--font);
+}
+
+.recommend-badge {
+  display: inline-flex;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--sun);
+  color: var(--ink);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-shadow: none;
 }
 
 .world-card:hover {
@@ -1194,5 +1246,127 @@ button {
   }
   100% {
     transform: scale(1) rotate(0);
+  }
+}
+
+/* ---------- Rhyme Time ---------- */
+
+.rhyme-target {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.rhyme-emoji {
+  font-size: 4.6rem;
+  line-height: 1;
+  animation: bounce-slow 2.4s ease-in-out infinite;
+}
+
+.rhyme-word {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+/* ---------- Number Line Frog ---------- */
+
+.number-line {
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 100%;
+}
+
+.line-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 34px;
+}
+
+.line-frog {
+  font-size: 1.6rem;
+  height: 30px;
+  animation: bounce-fast 0.8s ease-in-out infinite;
+}
+
+.line-paw {
+  font-size: 0.85rem;
+  height: 18px;
+  animation: sticker-in 0.3s ease backwards;
+}
+
+.line-number {
+  font-size: 1rem;
+  font-weight: 700;
+  background: var(--paper);
+  border-radius: 8px;
+  width: 30px;
+  text-align: center;
+  padding: 3px 0;
+}
+
+.line-number.line-here {
+  background: var(--leaf);
+  color: #fff;
+}
+
+/* ---------- Rocket blast-off ---------- */
+
+.rocket-scene.blastoff {
+  animation: none;
+}
+
+.rocket-scene.blastoff .rocket {
+  animation: blastoff 1.2s ease-in forwards;
+  display: inline-block;
+}
+
+.rocket-scene.blastoff .rocket-flame {
+  animation: flame-grow 1.2s ease-in forwards;
+}
+
+.rocket-trail {
+  font-size: 1.4rem;
+  animation: trail-fade 1s ease-out forwards;
+}
+
+@keyframes blastoff {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  20% {
+    transform: translateY(4px) scale(1.05, 0.92);
+  }
+  100% {
+    transform: translateY(-130px) scale(0.7);
+    opacity: 0;
+  }
+}
+
+@keyframes flame-grow {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  30% {
+    transform: scale(1.8);
+  }
+  100% {
+    transform: translateY(-90px) scale(0.5);
+    opacity: 0;
+  }
+}
+
+@keyframes trail-fade {
+  from {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(14px) scale(1.6);
+    opacity: 0;
   }
 }
