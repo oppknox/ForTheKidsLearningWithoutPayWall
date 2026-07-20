@@ -15,6 +15,7 @@ export type Action =
       startLevel?: number
     }
   | { type: 'recordHint'; gameId: string; startLevel?: number }
+  | { type: 'unlockReward'; rewardId: string; cost: number }
   | { type: 'setMuted'; muted: boolean }
   | { type: 'setVoice'; voiceName: string | null }
   | { type: 'replaceState'; state: AppState }
@@ -38,6 +39,8 @@ export function reducer(s: AppState, a: Action): AppState {
         stars: 0,
         stickers: [],
         progress: {},
+        practiceDays: [],
+        unlockedRewards: [],
       }
       return { ...s, profiles: [...s.profiles, profile] }
     }
@@ -68,12 +71,22 @@ export function reducer(s: AppState, a: Action): AppState {
           stars: p.stars + result.starsEarned,
           stickers,
           progress: { ...p.progress, [a.gameId]: result.progress },
+          practiceDays: Array.from(new Set([...(p.practiceDays ?? []), new Date().toLocaleDateString('en-CA')])),
         }
       })
     case 'recordHint':
       return updateActive(s, (p) => {
         const current = p.progress[a.gameId] ?? newProgress(a.startLevel)
         return { ...p, progress: { ...p.progress, [a.gameId]: applyHint(current) } }
+      })
+    case 'unlockReward':
+      return updateActive(s, (p) => {
+        if ((p.unlockedRewards ?? []).includes(a.rewardId) || p.stars < a.cost) return p
+        return {
+          ...p,
+          stars: p.stars - a.cost,
+          unlockedRewards: [...(p.unlockedRewards ?? []), a.rewardId],
+        }
       })
     case 'setMuted':
       return { ...s, muted: a.muted }

@@ -14,7 +14,15 @@ export function normalizeState(value: unknown): AppState | null {
     typeof profile.progress === 'object' && profile.progress !== null,
   )
   if (!validProfiles) return null
-  return { ...structuredClone(DEFAULT_STATE), ...candidate }
+  return {
+    ...structuredClone(DEFAULT_STATE),
+    ...candidate,
+    profiles: candidate.profiles.map((profile) => ({
+      ...profile,
+      practiceDays: Array.isArray(profile.practiceDays) ? profile.practiceDays : [],
+      unlockedRewards: Array.isArray(profile.unlockedRewards) ? profile.unlockedRewards : [],
+    })),
+  }
 }
 
 export function loadState(): AppState {

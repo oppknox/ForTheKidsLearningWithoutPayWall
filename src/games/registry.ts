@@ -45,6 +45,9 @@ import patternParade from './numbers/patternParade'
 import clockworkCastle from './numbers/clockworkCastle'
 import storyProblemTheater from './numbers/storyProblemTheater'
 import fractionPizza from './multiplication/fractionPizza'
+import wordFlip from './flashcards/wordFlip'
+import numberFlip from './flashcards/numberFlip'
+import mathFactsFlip from './flashcards/mathFactsFlip'
 
 export const GAMES: GameDef[] = [
   letterPop,
@@ -53,17 +56,20 @@ export const GAMES: GameDef[] = [
   wordBuilder,
   rhymeTime,
   soundGarden,
+  wordFlip,
   countTheFish,
   bubbleAddition,
   numberLineFrog,
   shapeSafari,
   patternParade,
+  numberFlip,
   timesTableGarden,
   arrayBuilder,
   rocketRace,
   fractionPizza,
   clockworkCastle,
   storyProblemTheater,
+  mathFactsFlip,
 ]
 
 export function gamesForWorld(w: WorldId): GameDef[] {

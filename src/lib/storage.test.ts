@@ -12,6 +12,8 @@ const sampleState: AppState = {
       stars: 12,
       stickers: ['🦄'],
       progress: { letterPop: { level: 2, streak: 1, totalCorrect: 9 } },
+      practiceDays: [],
+      unlockedRewards: [],
     },
   ],
   activeProfileId: 'p1',
