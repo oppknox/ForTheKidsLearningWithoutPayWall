@@ -31,8 +31,16 @@ export const STICKER_POOL: string[] = [
 import letterPop from './letters/letterPop'
 import letterMatch from './letters/letterMatch'
 import alphabetParade from './letters/alphabetParade'
+import countTheFish from './numbers/countTheFish'
+import bubbleAddition from './numbers/bubbleAddition'
 
-export const GAMES: GameDef[] = [letterPop, letterMatch, alphabetParade]
+export const GAMES: GameDef[] = [
+  letterPop,
+  letterMatch,
+  alphabetParade,
+  countTheFish,
+  bubbleAddition,
+]
 
 export function gamesForWorld(w: WorldId): GameDef[] {
   return GAMES.filter((g) => g.world === w)

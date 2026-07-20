@@ -958,3 +958,86 @@ button {
 .dot-off {
   color: rgba(58, 52, 80, 0.25);
 }
+
+/* ---------- Number Ocean ---------- */
+
+.fish-tank {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  max-width: 480px;
+}
+
+.fish {
+  font-size: 2.6rem;
+  position: relative;
+  animation: sway 2.4s ease-in-out infinite;
+  display: inline-block;
+}
+
+.fish-number {
+  position: absolute;
+  top: -12px;
+  right: -6px;
+  font-size: 1rem;
+  font-weight: 700;
+  background: var(--sun);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: sticker-in 0.3s ease;
+}
+
+@keyframes sway {
+  0%,
+  100% {
+    transform: translateX(0) rotate(0);
+  }
+  50% {
+    transform: translateX(8px) rotate(4deg);
+  }
+}
+
+.bubble-scene {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.bubble-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+  max-width: 220px;
+}
+
+.bubble {
+  font-size: 2.2rem;
+  animation: float 3s ease-in-out infinite;
+  display: inline-block;
+}
+
+.bubble:nth-child(2n) {
+  animation-delay: -1.2s;
+}
+
+.bubble-away {
+  animation: bubble-away 1s ease forwards;
+}
+
+@keyframes bubble-away {
+  to {
+    transform: translateY(-60px) scale(0.4);
+    opacity: 0;
+  }
+}
+
+.bubble-op {
+  font-size: 3rem;
+  font-weight: 700;
+}
