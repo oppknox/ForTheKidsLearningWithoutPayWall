@@ -33,6 +33,8 @@ import letterMatch from './letters/letterMatch'
 import alphabetParade from './letters/alphabetParade'
 import countTheFish from './numbers/countTheFish'
 import bubbleAddition from './numbers/bubbleAddition'
+import arrayBuilder from './multiplication/arrayBuilder'
+import rocketRace from './multiplication/rocketRace'
 
 export const GAMES: GameDef[] = [
   letterPop,
@@ -40,6 +42,8 @@ export const GAMES: GameDef[] = [
   alphabetParade,
   countTheFish,
   bubbleAddition,
+  arrayBuilder,
+  rocketRace,
 ]
 
 export function gamesForWorld(w: WorldId): GameDef[] {
