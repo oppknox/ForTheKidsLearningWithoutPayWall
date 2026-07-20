@@ -10,6 +10,7 @@ import { WhatsNew } from './screens/WhatsNew'
 import { WorldMap } from './screens/WorldMap'
 import { WorldScreen } from './screens/WorldScreen'
 import { StickerBook } from './screens/StickerBook'
+import { Rewards } from './screens/Rewards'
 import { gameById } from './games/registry'
 import { GameShell } from './games/GameShell'
 
@@ -80,6 +81,7 @@ export default function App() {
             <Route path="/play" element={<RequireKid><WorldMap /></RequireKid>} />
             <Route path="/world/:worldId" element={<RequireKid><WorldScreen /></RequireKid>} />
             <Route path="/stickers" element={<RequireKid><StickerBook /></RequireKid>} />
+            <Route path="/rewards" element={<RequireKid><Rewards /></RequireKid>} />
             <Route path="/game/:gameId" element={<RequireKid><GameRoute /></RequireKid>} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

@@ -1366,6 +1366,151 @@ button.header-chip { border: none; cursor: pointer; font-family: var(--font); }
   }
 }
 
+/* ---------- Treasure Trail rewards ---------- */
+.rewards-screen { max-width: 1120px; }
+.treasure-hero {
+  min-height: 410px;
+  display: grid;
+  place-items: center;
+  padding: clamp(24px, 5vw, 64px);
+  border-radius: 36px;
+  background: linear-gradient(#ffffff15, #ffffff15), url('/assets/treasure-trail.webp') center/cover;
+  box-shadow: 0 16px 0 #614ba0, 0 24px 45px #59409345;
+  text-align: center;
+  overflow: hidden;
+}
+.trail-sunset .treasure-hero { filter: saturate(1.15) sepia(.08); }
+.trail-sparkle .treasure-hero { box-shadow: 0 16px 0 #614ba0, 0 0 36px #fff18c, 0 24px 45px #59409345; }
+.trail-royal .treasure-hero { outline: 8px solid #ffd95a; outline-offset: -8px; }
+.treasure-hero > div {
+  width: min(650px, 100%);
+  padding: 22px;
+  border-radius: 28px;
+  background: #fffdf2e8;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 8px 25px #4b387a30;
+}
+.treasure-hero h1 { margin: 4px 0 18px; color: #493774; font-size: clamp(1.7rem, 4vw, 2.6rem); }
+.eyebrow { margin: 0; color: #e0593d; font-weight: 900; letter-spacing: .04em; text-transform: uppercase; }
+.next-goal { display: flex; align-items: center; gap: 14px; margin: 0; padding: 14px; border-radius: 20px; background: white; text-align: left; }
+.next-goal div { flex: 1; }
+.goal-emoji { font-size: 2.4rem; }
+.reward-section { margin: 42px 0; }
+.reward-section h2 { color: #493774; font-size: clamp(1.5rem, 3vw, 2rem); }
+.collection-grid, .shop-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.collection-card { padding: 20px; border-radius: 26px; background: white; box-shadow: 0 8px 0 #624b9b35; }
+.collection-card.letters { border-top: 9px solid #ff7958; }
+.collection-card.numbers { border-top: 9px solid #2aa7de; }
+.collection-card.multiplication { border-top: 9px solid #8e6fd8; }
+.collection-card h3, .achievement-card h3 { margin: 0 0 6px; color: #493774; }
+.collection-card p, .achievement-card p { margin: 0; }
+.collection-prizes { display: flex; gap: 10px; margin-top: 18px; }
+.collection-prizes span { position: relative; display: grid; place-items: center; width: 64px; aspect-ratio: 1; border-radius: 50%; background: #ece8f5; font-size: 1.7rem; filter: grayscale(1); }
+.collection-prizes span.earned { background: #fff0a8; filter: none; animation: sticker-in .4s ease; }
+.collection-prizes small { position: absolute; right: -3px; bottom: -3px; min-width: 23px; padding: 3px; border-radius: 12px; background: #493774; color: white; font-size: .68rem; }
+.achievement-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.achievement-card { display: grid; grid-template-columns: 58px 1fr auto; align-items: center; gap: 14px; padding: 16px; border-radius: 22px; background: #eeeaf6; opacity: .78; }
+.achievement-card.earned { background: linear-gradient(135deg, #fff8cf, #fff); box-shadow: 0 6px 0 #efbd3c; opacity: 1; }
+.achievement-emoji { display: grid; place-items: center; width: 55px; aspect-ratio: 1; border-radius: 50%; background: white; font-size: 2rem; }
+.achievement-card > strong { color: #6a50ad; }
+.star-shop > p { color: #4b4263; }
+.shop-grid button { display: grid; gap: 6px; padding: 20px; border: 0; border-radius: 24px; background: white; color: #493774; box-shadow: 0 7px 0 #6652a3; font: inherit; cursor: pointer; }
+.shop-grid button span { font-size: 2.6rem; }
+.shop-grid button:disabled { cursor: default; opacity: .58; box-shadow: 0 4px 0 #aaa1c1; }
+.reward-link { animation: reward-bob 2.2s ease-in-out infinite; }
+@keyframes reward-bob { 50% { transform: translateY(-3px); } }
+@media (max-width: 720px) {
+  .treasure-hero { min-height: 350px; padding: 18px; }
+  .collection-grid, .shop-grid, .achievement-grid { grid-template-columns: 1fr; }
+  .achievement-card { grid-template-columns: 52px 1fr; }
+  .achievement-card > strong { grid-column: 2; }
+}
+@media (prefers-reduced-motion: reduce) { .reward-link { animation: none; } }
+
+/* ---------- Flash card practice ---------- */
+
+.flashcard-screen { perspective: 1100px; }
+
+.flash-card {
+  position: relative;
+  width: min(430px, 88vw);
+  height: min(330px, 42vh);
+  min-height: 270px;
+  border: none;
+  border-radius: 36px;
+  background: transparent;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.2, 0.75, 0.25, 1);
+}
+
+.flash-card.revealed { transform: rotateY(180deg); }
+
+.flash-card:focus-visible {
+  outline: 5px solid var(--ink);
+  outline-offset: 5px;
+}
+
+.flash-card-side {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  padding: 28px;
+  border: 8px solid rgba(255, 255, 255, 0.72);
+  border-radius: 36px;
+  backface-visibility: hidden;
+  box-shadow: 0 10px 0 rgba(58, 52, 80, 0.2), 0 18px 28px rgba(58, 52, 80, 0.18);
+}
+
+.flash-front { background: linear-gradient(145deg, #fff, #e8f8ff); }
+.flash-back { background: linear-gradient(145deg, #fff8d7, #ffe0a8); transform: rotateY(180deg); }
+.flash-card-content { max-width: 100%; font-size: clamp(3.2rem, 13vw, 7rem); font-weight: 800; line-height: 1.05; text-align: center; overflow-wrap: anywhere; }
+.flash-card-side small { font-size: clamp(1rem, 3vw, 1.35rem); font-weight: 700; }
+
+.speak-card {
+  min-height: 48px;
+  padding: 9px 16px;
+  border: none;
+  border-radius: 999px;
+  background: var(--paper);
+  box-shadow: 0 3px 8px rgba(58, 52, 80, 0.15);
+  font: 700 1rem var(--font);
+  cursor: pointer;
+}
+
+.rating-buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+
+.rating-btn {
+  min-width: 150px;
+  min-height: 62px;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 5px 0 rgba(58, 52, 80, 0.2);
+  font: 700 1.08rem var(--font);
+  cursor: pointer;
+}
+
+.rating-btn.known { background: #bceac2; }
+.rating-btn.learning { background: #fff0ad; }
+.rating-btn.help { background: #dcd0fa; }
+.rating-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 rgba(58, 52, 80, 0.2); }
+.rating-btn:focus-visible, .speak-card:focus-visible { outline: 4px solid var(--ink); outline-offset: 3px; }
+
+@media (max-width: 520px) {
+  .flash-card { min-height: 240px; height: 36vh; }
+  .rating-buttons { width: 100%; }
+  .rating-btn { width: 100%; min-height: 56px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flash-card { transition: none; }
+}
+
 /* ---------- Word Builder ---------- */
 
 .word-picture {

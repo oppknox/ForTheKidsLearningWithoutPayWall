@@ -40,8 +40,8 @@ export function WorldMap() {
           <span>{activeProfile.name}</span>
         </Link>
         <span className="header-chip">⭐ {activeProfile.stars}</span>
-        <Link to="/stickers" className="header-chip">
-          📖 Stickers
+        <Link to="/rewards" className="header-chip reward-link">
+          🏆 My Rewards
         </Link>
         <SoundToggle />
       </header>

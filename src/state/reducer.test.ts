@@ -29,6 +29,8 @@ describe('profile management', () => {
     expect(p.stars).toBe(0)
     expect(p.stickers).toEqual([])
     expect(p.progress).toEqual({})
+    expect(p.practiceDays).toEqual([])
+    expect(p.unlockedRewards).toEqual([])
     expect(p.id).toBeTruthy()
   })
 
@@ -46,6 +48,26 @@ describe('profile management', () => {
     s = reducer(s, { type: 'deleteProfile', id })
     expect(s.profiles).toHaveLength(0)
     expect(s.activeProfileId).toBeNull()
+  })
+})
+
+describe('treasure rewards', () => {
+  it('records a practice day only once', () => {
+    let s = stateWithChild()
+    const action = { type: 'recordCorrect' as const, gameId: 'letterPop', hintsUsed: 0, stickerPool: [] }
+    s = reducer(s, action)
+    s = reducer(s, action)
+    expect(s.profiles[0].practiceDays).toHaveLength(1)
+  })
+
+  it('unlocks a permanent reward once and spends stars once', () => {
+    let s = stateWithChild()
+    s.profiles[0].stars = 50
+    s = reducer(s, { type: 'unlockReward', rewardId: 'sunset', cost: 30 })
+    expect(s.profiles[0].stars).toBe(20)
+    expect(s.profiles[0].unlockedRewards).toEqual(['sunset'])
+    s = reducer(s, { type: 'unlockReward', rewardId: 'sunset', cost: 30 })
+    expect(s.profiles[0].stars).toBe(20)
   })
 })
 

@@ -23,6 +23,10 @@ export interface Profile {
   stars: number
   stickers: string[]
   progress: Record<string, SkillProgress>
+  /** Local calendar days on which the child practiced. Missing days never erase progress. */
+  practiceDays: string[]
+  /** Permanent cosmetic rewards bought with earned stars. */
+  unlockedRewards: string[]
 }
 
 export interface AppState {
