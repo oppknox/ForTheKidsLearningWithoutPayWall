@@ -6,6 +6,20 @@
 
 :root {
   --font: 'Comic Sans MS', 'Segoe UI Rounded', 'Segoe UI', system-ui, sans-serif;
+  --sky-top: #7ed6f5;
+  --sky-bottom: #dff7ff;
+  --sun: #ffc93c;
+  --coral: #ff7b54;
+  --coral-deep: #e2572f;
+  --ocean: #2aa7de;
+  --ocean-deep: #1b6fa8;
+  --grape: #8e6fd8;
+  --grape-deep: #5e4b9e;
+  --leaf: #5cc46a;
+  --leaf-deep: #3d9a4a;
+  --ink: #3a3450;
+  --cloud: #ffffff;
+  --paper: rgba(255, 255, 255, 0.88);
 }
 
 html,
@@ -16,10 +30,278 @@ body,
 
 body {
   font-family: var(--font);
+  color: var(--ink);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  background: linear-gradient(var(--sky-top), var(--sky-bottom));
 }
 
 button {
   font-family: var(--font);
+  color: var(--ink);
+}
+
+/* ---------- App chrome ---------- */
+
+.app-shell {
+  position: relative;
+  min-height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.sky {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(var(--sky-top), var(--sky-bottom));
+  transition: background 0.6s ease;
+}
+
+.sky.letters {
+  background: linear-gradient(#ffb86b, #ffe3c1);
+}
+
+.sky.numbers {
+  background: linear-gradient(#2aa7de, #b8ecff);
+}
+
+.sky.multiplication {
+  background: linear-gradient(#8e6fd8, #e6dcff);
+}
+
+.cloud-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.cloud {
+  position: absolute;
+  width: 160px;
+  height: 56px;
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 100px;
+  animation: drift linear infinite;
+}
+
+.cloud::before,
+.cloud::after {
+  content: '';
+  position: absolute;
+  background: inherit;
+  border-radius: 50%;
+}
+
+.cloud::before {
+  width: 70px;
+  height: 70px;
+  top: -32px;
+  left: 28px;
+}
+
+.cloud::after {
+  width: 50px;
+  height: 50px;
+  top: -20px;
+  left: 84px;
+}
+
+@keyframes drift {
+  from {
+    transform: translateX(-220px);
+  }
+  to {
+    transform: translateX(110vw);
+  }
+}
+
+.screen {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  gap: 16px;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.screen-title {
+  font-size: clamp(1.6rem, 5vw, 2.6rem);
+  text-align: center;
+  text-shadow: 0 2px 0 rgba(255, 255, 255, 0.6);
+}
+
+.screen-subtitle {
+  font-size: 1.1rem;
+  text-align: center;
+  opacity: 0.85;
+}
+
+/* ---------- Candy buttons (signature) ---------- */
+
+.big-btn {
+  --btn-color: var(--coral);
+  --btn-deep: color-mix(in srgb, var(--btn-color) 70%, #000);
+  min-width: 64px;
+  min-height: 64px;
+  padding: 14px 28px;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--btn-color);
+  border: none;
+  border-radius: 24px;
+  box-shadow: 0 6px 0 var(--btn-deep), 0 10px 16px rgba(58, 52, 80, 0.2);
+  cursor: pointer;
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.big-btn:active {
+  transform: translateY(5px) scale(0.97, 0.94);
+  box-shadow: 0 1px 0 var(--btn-deep), 0 3px 6px rgba(58, 52, 80, 0.2);
+}
+
+.big-btn:focus-visible {
+  outline: 4px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.big-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.squash {
+  animation: squash 0.35s ease;
+}
+
+@keyframes squash {
+  0% {
+    transform: scale(1, 1);
+  }
+  35% {
+    transform: scale(1.15, 0.8);
+  }
+  70% {
+    transform: scale(0.92, 1.1);
+  }
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
+/* ---------- Mascot ---------- */
+
+.mascot {
+  display: inline-block;
+  transform-origin: 50% 100%;
+}
+
+.mascot.idle {
+  animation: bounce-slow 2.4s ease-in-out infinite;
+}
+
+.mascot.happy {
+  animation: bounce-fast 0.5s ease-in-out infinite;
+}
+
+.mascot.thinking {
+  animation: tilt 1.6s ease-in-out infinite;
+}
+
+.mascot.celebrate {
+  animation: jump 0.7s ease-in-out infinite;
+}
+
+@keyframes bounce-slow {
+  0%,
+  100% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(1.03, 0.97) translateY(2px);
+  }
+}
+
+@keyframes bounce-fast {
+  0%,
+  100% {
+    transform: translateY(0) scale(1, 1);
+  }
+  50% {
+    transform: translateY(-10px) scale(0.97, 1.05);
+  }
+}
+
+@keyframes tilt {
+  0%,
+  100% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+}
+
+@keyframes jump {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-3deg) scale(1.04, 0.96);
+  }
+  50% {
+    transform: translateY(-22px) rotate(4deg) scale(0.96, 1.06);
+  }
+}
+
+/* ---------- Confetti ---------- */
+
+.confetti-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 50;
+}
+
+.confetti-piece {
+  position: absolute;
+  top: -20px;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  animation: confetti-fall 2.6s ease-in forwards;
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-5vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) rotate(720deg);
+    opacity: 0.6;
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .mascot,
+  .cloud,
+  .confetti-piece,
+  .squash {
+    animation: none !important;
+  }
 }
