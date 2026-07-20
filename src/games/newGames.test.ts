@@ -1,0 +1,58 @@
+import { describe, expect, it } from 'vitest'
+import { generateShapeRound } from './letters/shapeSafari'
+import { generateSoundRound } from './letters/soundGarden'
+import { generatePatternRound } from './numbers/patternParade'
+import { generateClockRound } from './numbers/clockworkCastle'
+import { generateStoryRound } from './numbers/storyProblemTheater'
+import { generateFractionRound } from './multiplication/fractionPizza'
+
+const generators = [
+  generateShapeRound,
+  generateSoundRound,
+  generatePatternRound,
+  generateClockRound,
+  generateStoryRound,
+  generateFractionRound,
+]
+
+describe('pattern parade answers', () => {
+  it('continues ABAB patterns with B and AAB patterns with A', () => {
+    for (let i = 0; i < 60; i++) {
+      const simple = generatePatternRound(1)
+      const seq1 = (simple.payload as { sequence: string[] }).sequence
+      // [a,b,a,b,a] → next is b
+      expect(simple.answerId).toBe(seq1[1])
+      const advanced = generatePatternRound(5)
+      const seq2 = (advanced.payload as { sequence: string[] }).sequence
+      // [a,a,b,a,a,b] → next is a
+      expect(advanced.answerId).toBe(seq2[0])
+    }
+  })
+})
+
+describe('fraction pizza distractors', () => {
+  it('never offers a fraction equivalent to the answer', () => {
+    for (let i = 0; i < 100; i++) {
+      const r = generateFractionRound((i % 5) + 1)
+      const [n, d] = r.answerId.split('/').map(Number)
+      for (const c of r.choices) {
+        if (c.id === r.answerId) continue
+        const [cn, cd] = c.id.split('/').map(Number)
+        expect(cn * d).not.toBe(n * cd)
+      }
+    }
+  })
+})
+
+describe('new game round generators', () => {
+  for (const generate of generators) {
+    it(`${generate.name} always includes exactly one answer`, () => {
+      for (let i = 0; i < 100; i++) {
+        const round = generate((i % 5) + 1)
+        expect(round.choices.filter((choice) => choice.id === round.answerId)).toHaveLength(1)
+        expect(new Set(round.choices.map((choice) => choice.id)).size).toBe(round.choices.length)
+        expect(round.promptSpeech.length).toBeGreaterThan(5)
+      }
+    })
+  }
+})

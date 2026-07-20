@@ -469,6 +469,25 @@ button {
   height: 22px;
 }
 
+.install-card {
+  width: min(620px, 100%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  background: var(--paper);
+  padding: 16px 20px;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(58, 52, 80, 0.12);
+}
+
+.install-card h2 { font-size: 1.15rem; margin-bottom: 4px; }
+.install-note { background: var(--paper); padding: 12px 18px; border-radius: 16px; }
+
+@media (max-width: 520px) {
+  .install-card { align-items: stretch; flex-direction: column; text-align: center; }
+}
+
 /* ---------- Profile editor ---------- */
 
 .editor-preview {
@@ -1137,6 +1156,114 @@ button.header-chip { border: none; cursor: pointer; font-family: var(--font); }
 .rocket-flame {
   font-size: 1.6rem;
   animation: flicker 0.4s ease-in-out infinite;
+}
+
+/* ---------- New learning adventures ---------- */
+
+.safari-scene {
+  min-width: min(620px, 82vw);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  font-size: clamp(2.2rem, 8vw, 4.6rem);
+  padding: 12px;
+}
+
+.safari-scene strong {
+  width: 100%;
+  font-size: 1.05rem;
+  text-align: center;
+}
+
+.sound-flower {
+  width: 170px;
+  height: 150px;
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+
+.sound-flower span { font-size: 8rem; line-height: 1; }
+.sound-flower strong { position: absolute; font-size: 3.5rem; color: var(--ink); }
+
+.pattern-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: clamp(2.1rem, 8vw, 4rem);
+}
+
+.pattern-missing {
+  width: 68px;
+  height: 68px;
+  display: inline-grid;
+  place-items: center;
+  border: 4px dashed var(--grape);
+  border-radius: 18px;
+  color: var(--grape-deep);
+  font-weight: 700;
+}
+
+.learning-clock {
+  width: 220px;
+  height: 220px;
+  position: relative;
+  border: 14px solid var(--grape);
+  border-radius: 50%;
+  background: repeating-conic-gradient(from -3deg, var(--ink) 0 2deg, transparent 2deg 30deg), #fff;
+  box-shadow: inset 0 0 0 12px #fff, 0 7px 0 var(--grape-deep);
+}
+
+.clock-hand {
+  position: absolute;
+  left: calc(50% - 4px);
+  bottom: 50%;
+  width: 8px;
+  border-radius: 99px;
+  background: var(--ink);
+  transform-origin: 50% 100%;
+}
+
+.clock-hand.hour { height: 62px; }
+.clock-hand.minute { height: 82px; width: 6px; left: calc(50% - 3px); background: var(--coral); }
+.clock-pin { position: absolute; width: 20px; height: 20px; left: calc(50% - 10px); top: calc(50% - 10px); border-radius: 50%; background: var(--sun); border: 4px solid var(--ink); }
+
+.story-stage {
+  min-width: min(580px, 82vw);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  font-size: 2.4rem;
+}
+
+.story-stage > div { max-width: 240px; display: flex; flex-wrap: wrap; gap: 3px; justify-content: center; }
+.story-stage > strong { font-size: 2.8rem; }
+.story-away { opacity: 0.28; text-decoration: line-through; }
+
+.pizza-parts {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-width: 360px;
+  font-size: 4rem;
+}
+
+.pizza-parts span:not(.topped) { color: #d7b36a; font-size: 3.2rem; }
+.pizza-parts strong { width: 100%; text-align: center; font-size: 1.2rem; }
+
+@media (max-width: 520px) {
+  .learning-clock { width: 180px; height: 180px; }
+  .clock-hand.hour { height: 50px; }
+  .clock-hand.minute { height: 68px; }
+  .story-stage { min-width: 0; gap: 8px; font-size: 1.8rem; }
+  .pizza-parts { font-size: 3rem; }
 }
 
 @keyframes flicker {
