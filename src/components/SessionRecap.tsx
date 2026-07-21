@@ -1,6 +1,7 @@
 import { BigButton } from './BigButton'
 import { Confetti } from './Confetti'
 import { Mascot } from './Mascot'
+import { StarCount } from './StarCount'
 import { nextGoalFor, type Achievement } from '../lib/achievements'
 import type { Profile } from '../types'
 
@@ -43,10 +44,7 @@ export function SessionRecap({
       <Confetti burst={burst} />
       <Mascot mood="celebrate" size={140} />
       <h1 className="screen-title">Hooray, {name}!</h1>
-      <p className="finish-stars">
-        You earned {'⭐'.repeat(Math.min(sessionStars, 15))}
-        {sessionStars > 15 ? ` ×${sessionStars}` : ''}
-      </p>
+      <StarCount stars={sessionStars} />
 
       {shown.length > 0 && (
         <section className="recap-card" aria-label="What you practiced">

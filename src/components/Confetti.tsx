@@ -2,11 +2,11 @@ import { useMemo } from 'react'
 
 const COLORS = ['#ff7b54', '#ffc93c', '#2aa7de', '#8e6fd8', '#5cc46a', '#ff5f9e']
 
-/** Fires 40 falling pieces every time `burst` increments. burst=0 renders nothing. */
+/** Fires a gentle burst of pieces when `burst` increments. burst=0 renders nothing. */
 export function Confetti({ burst }: { burst: number }) {
   const pieces = useMemo(
     () =>
-      Array.from({ length: 40 }, (_, i) => ({
+      Array.from({ length: 18 }, (_, i) => ({
         left: Math.random() * 100,
         delay: Math.random() * 0.5,
         color: COLORS[i % COLORS.length],

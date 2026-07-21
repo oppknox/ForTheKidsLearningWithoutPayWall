@@ -1,6 +1,7 @@
 import type { DisplayProps, GameDef, Round, RoundContext } from '../types'
 import { shuffle } from '../../lib/rng'
 import { drawFactorsWithMastery, factItemId, productChoices } from './factors'
+import { CountableGrid } from '../../components/CountableGrid'
 
 function generateRound(level: number, ctx?: RoundContext): Round {
   const { a, b } = drawFactorsWithMastery(level, ctx)
@@ -20,25 +21,17 @@ function generateRound(level: number, ctx?: RoundContext): Round {
   }
 }
 
-function Display({ round, hintTier }: DisplayProps) {
+function Display({ round, hintTier, solved }: DisplayProps) {
   const { a, b } = round.payload as { a: number; b: number }
   return (
-    <div className="gem-array">
-      {Array.from({ length: a }, (_, row) => (
-        <div key={row} className="gem-row">
-          {Array.from({ length: b }, (_, col) => (
-            <span
-              key={col}
-              className="gem"
-              style={{ animationDelay: `${(row * b + col) * 0.06}s` }}
-            >
-              💎
-            </span>
-          ))}
-          {hintTier >= 2 && <span className="gem-running">{(row + 1) * b}</span>}
-        </div>
-      ))}
-    </div>
+    <CountableGrid
+      rows={a}
+      cols={b}
+      unit="💎"
+      solved={solved}
+      hintTier={hintTier}
+      className="gem-array"
+    />
   )
 }
 

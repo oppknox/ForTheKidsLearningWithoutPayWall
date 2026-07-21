@@ -1,6 +1,7 @@
 import type { DisplayProps, GameDef, Round } from '../types'
 import { randInt, sample, shuffle } from '../../lib/rng'
 import { productChoices } from './factors'
+import { CountableGrid } from '../../components/CountableGrid'
 
 /** Which times tables each level practices — one new table family at a time. */
 export const TABLES_PER_LEVEL: Record<number, number[]> = {
@@ -37,28 +38,15 @@ function generateRound(level: number): Round {
 function Display({ round, hintTier, solved }: DisplayProps) {
   const { a, b } = round.payload as { a: number; b: number }
   return (
-    <div className="garden">
-      {Array.from({ length: a }, (_, row) => (
-        <div key={row} className="garden-row">
-          {Array.from({ length: b }, (_, col) => (
-            <span
-              key={col}
-              className={`seed ${solved ? 'bloomed' : ''}`}
-              style={{
-                animationDelay: solved
-                  ? `${(row * b + col) * 0.05}s`
-                  : `${(row * b + col) * 0.06}s`,
-              }}
-            >
-              {solved ? '🌷' : '🌱'}
-            </span>
-          ))}
-          {hintTier >= 2 && !solved && (
-            <span className="gem-running">{(row + 1) * b}</span>
-          )}
-        </div>
-      ))}
-    </div>
+    <CountableGrid
+      rows={a}
+      cols={b}
+      unit="🌱"
+      unitSolved="🌷"
+      solved={solved}
+      hintTier={hintTier}
+      className="garden"
+    />
   )
 }
 

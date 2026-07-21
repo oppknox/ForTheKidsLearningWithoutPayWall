@@ -55,28 +55,34 @@ function generateRound(level: number, _ctx?: RoundContext): Round {
   }
 }
 
+function BubbleGroup({
+  count,
+  fading,
+}: {
+  count: number
+  fading?: boolean
+}) {
+  const visible = Math.min(count, 10)
+  const hidden = count - visible
+  return (
+    <div className={`bubble-group ${fading ? 'bubble-group-away' : ''}`}>
+      {Array.from({ length: visible }, (_, i) => (
+        <span key={i} className={`bubble ${fading ? 'bubble-away' : ''}`}>
+          🫧
+        </span>
+      ))}
+      {hidden > 0 && <span className="emoji-stack-more">+{hidden}</span>}
+    </div>
+  )
+}
+
 function Display({ round, hintTier }: DisplayProps) {
   const { a, b, op } = round.payload as { a: number; b: number; op: '+' | '-' }
   return (
     <div className="bubble-scene">
-      <div className="bubble-group">
-        {Array.from({ length: a }, (_, i) => (
-          <span key={i} className="bubble">
-            🫧
-          </span>
-        ))}
-      </div>
+      <BubbleGroup count={a} />
       <span className="bubble-op">{op === '+' ? '+' : '−'}</span>
-      <div className="bubble-group">
-        {Array.from({ length: b }, (_, i) => (
-          <span
-            key={i}
-            className={`bubble ${op === '-' && hintTier >= 2 ? 'bubble-away' : ''}`}
-          >
-            🫧
-          </span>
-        ))}
-      </div>
+      <BubbleGroup count={b} fading={op === '-' && hintTier >= 2} />
     </div>
   )
 }
