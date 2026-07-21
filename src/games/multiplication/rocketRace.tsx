@@ -1,9 +1,9 @@
-import type { DisplayProps, GameDef, Round } from '../types'
+import type { DisplayProps, GameDef, Round, RoundContext } from '../types'
 import { shuffle } from '../../lib/rng'
-import { drawFactors, productChoices } from './factors'
+import { drawFactorsWithMastery, factItemId, productChoices } from './factors'
 
-function generateRound(level: number): Round {
-  const { a, b } = drawFactors(level)
+function generateRound(level: number, ctx?: RoundContext): Round {
+  const { a, b } = drawFactorsWithMastery(level, ctx)
   const product = a * b
   const skipCount = Array.from({ length: a }, (_, k) => (k + 1) * b).join(', ')
 
@@ -17,6 +17,7 @@ function generateRound(level: number): Round {
       explain: `${a} times ${b} is ${product}! Blast off!`,
     },
     payload: { a, b },
+    itemId: factItemId(a, b),
   }
 }
 

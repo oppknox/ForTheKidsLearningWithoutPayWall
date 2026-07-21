@@ -9,9 +9,11 @@ import { STICKER_POOL, WORLDS } from '../registry'
 import { speak } from '../../lib/speech'
 import { playDing, playFanfare, playPop } from '../../lib/sfx'
 import { Mascot } from '../../components/Mascot'
-import { Confetti } from '../../components/Confetti'
 import { BigButton } from '../../components/BigButton'
 import { SoundToggle } from '../../components/SoundToggle'
+import { SessionRecap } from '../../components/SessionRecap'
+import { isMissionComplete, missionStatus } from '../../lib/dailyMission'
+import { itemKey } from '../../lib/itemMastery'
 
 export interface FlashCard {
   id: string
@@ -48,6 +50,8 @@ function FlashCardPlayer({ config }: { config: FlashCardConfig }) {
   const [repeatCount, setRepeatCount] = useState<Record<string, number>>({})
   const [sessionStars, setSessionStars] = useState(0)
   const [finished, setFinished] = useState(false)
+  const [highlights, setHighlights] = useState<string[]>([])
+  const [missionDone, setMissionDone] = useState(false)
 
   const card = queue[0]
 
@@ -67,11 +71,29 @@ function FlashCardPlayer({ config }: { config: FlashCardConfig }) {
   const rate = (rating: Rating) => {
     if (!card || !revealed) return
     const hintsUsed = rating === 'known' ? 0 : rating === 'learning' ? 1 : 2
+    const highlight = card.back.replace(/^\p{Extended_Pictographic}+\s*/u, '').trim().slice(0, 40) || card.front
     if (rating === 'help') dispatch({ type: 'recordHint', gameId: config.id, startLevel })
-    dispatch({ type: 'recordCorrect', gameId: config.id, hintsUsed, stickerPool: STICKER_POOL, startLevel })
+    dispatch({
+      type: 'recordCorrect',
+      gameId: config.id,
+      hintsUsed,
+      stickerPool: STICKER_POOL,
+      startLevel,
+      highlight,
+      itemId: itemKey(
+        config.id.includes('math') || config.id.includes('Math') ? 'fact' : config.id.includes('word') ? 'word' : 'letter',
+        card.id,
+      ),
+    })
     playDing()
     const earned = hintsUsed === 0 ? 3 : hintsUsed === 1 ? 2 : 1
     setSessionStars((stars) => stars + earned)
+    setHighlights((h) => (h.includes(highlight) ? h : [...h, highlight]))
+
+    const mission = missionStatus(activeProfile)
+    if (mission.game.id === config.id && !mission.complete && mission.correct + 1 >= mission.target) {
+      setMissionDone(true)
+    }
 
     const repeats = repeatCount[card.id] ?? 0
     const canRepeat = rating !== 'known' && repeats === 0 && reviewed < 5
@@ -95,22 +117,26 @@ function FlashCardPlayer({ config }: { config: FlashCardConfig }) {
     setReviewed(0)
     setRepeatCount({})
     setSessionStars(0)
+    setHighlights([])
+    setMissionDone(false)
     setFinished(false)
   }
 
   if (finished) {
     return (
-      <main className="screen">
-        <Confetti burst={1} />
-        <Mascot mood="celebrate" size={140} />
-        <h1 className="screen-title">Great practice, {activeProfile.name}!</h1>
-        <p className="finish-stars">You earned {'⭐'.repeat(Math.min(sessionStars, 15))}</p>
-        <p className="screen-subtitle">Cards marked “I’m learning” or “Help me” were gently repeated.</p>
-        <div className="editor-actions">
-          <BigButton onClick={restart}>Practice again</BigButton>
-          <BigButton color="var(--ocean)" onClick={() => navigate(`/world/${config.world}`)}>More games</BigButton>
-        </div>
-      </main>
+      <SessionRecap
+        name={activeProfile.name}
+        sessionStars={sessionStars}
+        highlights={highlights}
+        profile={activeProfile}
+        missionJustCompleted={missionDone || (missionStatus(activeProfile).game.id === config.id && isMissionComplete(activeProfile))}
+        playAgainLabel="Practice again"
+        onPlayAgain={() => {
+          playPop()
+          restart()
+        }}
+        onMoreGames={() => navigate(`/world/${config.world}`)}
+      />
     )
   }
 

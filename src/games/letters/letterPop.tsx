@@ -1,9 +1,20 @@
-import type { GameDef, Round } from '../types'
+import type { GameDef, Round, RoundContext } from '../types'
 import { ALPHABET, lookalikesFor } from './letterData'
 import { sample, shuffle } from '../../lib/rng'
+import { itemKey, pickPreferredId } from '../../lib/itemMastery'
 
-function generateRound(level: number): Round {
-  const target = sample(ALPHABET, 1)[0]
+function generateRound(level: number, ctx?: RoundContext): Round {
+  const letters = ALPHABET.map((e) => e.letter)
+  const recent = (ctx?.recentItemIds ?? [])
+    .filter((k) => k.startsWith('letter:'))
+    .map((k) => k.slice('letter:'.length))
+  const preferred =
+    ctx?.preferItemId?.startsWith('letter:')
+      ? ctx.preferItemId.slice('letter:'.length)
+      : pickPreferredId(ctx?.allMastery, 'letter', letters, recent)
+  const target =
+    ALPHABET.find((e) => e.letter === preferred) ?? sample(ALPHABET, 1)[0]
+
   const count = Math.min(2 + level, 5)
   const lowercase = level >= 4
 
@@ -14,18 +25,19 @@ function generateRound(level: number): Round {
   )
   distractors = [...distractors, ...sample(remaining, count - 1 - distractors.length)]
 
-  const letters = shuffle([target.letter, ...distractors])
+  const choices = shuffle([target.letter, ...distractors])
 
   return {
     promptText: `Pop the letter ${target.letter}!`,
     promptSpeech: `Pop the balloon with the letter ${target.letter}!`,
-    choices: letters.map((l) => ({ id: l, label: lowercase ? l.toLowerCase() : l })),
+    choices: choices.map((l) => ({ id: l, label: lowercase ? l.toLowerCase() : l })),
     answerId: target.letter,
     hints: {
       nudge: `${target.letter} is for ${target.word} ${target.emoji}!`,
       explain: `This one is ${target.letter}! ${target.letter} is for ${target.word}!`,
     },
     payload: { balloons: true },
+    itemId: itemKey('letter', target.letter),
   }
 }
 

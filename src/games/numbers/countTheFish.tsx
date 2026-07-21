@@ -1,5 +1,6 @@
-import type { DisplayProps, GameDef, Round } from '../types'
+import type { DisplayProps, GameDef, Round, RoundContext } from '../types'
 import { randInt, shuffle } from '../../lib/rng'
+import { itemKey } from '../../lib/itemMastery'
 
 const RANGES: Record<number, [number, number]> = {
   1: [1, 5],
@@ -9,7 +10,7 @@ const RANGES: Record<number, [number, number]> = {
   5: [6, 20],
 }
 
-function generateRound(level: number): Round {
+function generateRound(level: number, _ctx?: RoundContext): Round {
   const [lo, hi] = RANGES[Math.min(Math.max(level, 1), 5)]
   const count = randInt(lo, hi)
 
@@ -30,6 +31,7 @@ function generateRound(level: number): Round {
       explain: `There are ${count} fish! Let's count them together: ${countingWords(count)}!`,
     },
     payload: { count },
+    itemId: itemKey('count', String(count)),
   }
 }
 

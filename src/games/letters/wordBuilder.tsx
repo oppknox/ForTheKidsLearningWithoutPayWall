@@ -7,10 +7,11 @@ import { STICKER_POOL } from '../registry'
 import { newProgress, applyCorrect } from '../../lib/progress'
 import { startingLevel } from '../../lib/ageFit'
 import { Mascot, type MascotMood } from '../../components/Mascot'
-import { Confetti } from '../../components/Confetti'
-import { BigButton } from '../../components/BigButton'
+import { SessionRecap } from '../../components/SessionRecap'
 import { speak } from '../../lib/speech'
 import { playDing, playFanfare, playPop, playWhoosh } from '../../lib/sfx'
+import { isMissionComplete, missionStatus } from '../../lib/dailyMission'
+import { itemKey } from '../../lib/itemMastery'
 
 const WORDS_PER_SESSION = 5
 const NEXT_WORD_DELAY = 1600
@@ -35,6 +36,9 @@ function FreePlay() {
   const [sessionStars, setSessionStars] = useState(0)
   const [finished, setFinished] = useState(false)
   const [leveledUp, setLeveledUp] = useState(false)
+  const [sessionLeveled, setSessionLeveled] = useState(false)
+  const [highlights, setHighlights] = useState<string[]>([])
+  const [missionDone, setMissionDone] = useState(false)
   const usedWords = useRef(new Set<string>())
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
@@ -102,8 +106,16 @@ function FreePlay() {
           hintsUsed: maxTier,
           stickerPool: STICKER_POOL,
           startLevel,
+          highlight: word.toUpperCase(),
+          itemId: itemKey('word', word.toUpperCase()),
         })
         setSessionStars((s) => s + result.starsEarned)
+        setHighlights((h) => (h.includes(word.toUpperCase()) ? h : [...h, word.toUpperCase()]))
+        if (result.leveledUp) setSessionLeveled(true)
+        const mission = missionStatus(activeProfile)
+        if (mission.game.id === 'wordBuilder' && !mission.complete && mission.correct + 1 >= mission.target) {
+          setMissionDone(true)
+        }
         const isLast = wordsDone + 1 >= WORDS_PER_SESSION
         timer.current = setTimeout(() => {
           setLeveledUp(false)
@@ -144,32 +156,29 @@ function FreePlay() {
 
   if (finished) {
     return (
-      <main className="screen">
-        <Confetti burst={1} />
-        <Mascot mood="celebrate" size={140} />
-        <h1 className="screen-title">Super spelling, {activeProfile.name}!</h1>
-        <p className="finish-stars">
-          You earned {'⭐'.repeat(Math.min(sessionStars, 15))}
-          {sessionStars > 15 ? ` ×${sessionStars}` : ''}
-        </p>
-        <div className="editor-actions">
-          <BigButton
-            onClick={() => {
-              playPop()
-              usedWords.current.clear()
-              setWordsDone(0)
-              setSessionStars(0)
-              setFinished(false)
-              startWord(activeProfile.progress['wordBuilder']?.level ?? startLevel)
-            }}
-          >
-            Play again!
-          </BigButton>
-          <BigButton color="var(--ocean)" onClick={() => navigate('/world/letters')}>
-            More games
-          </BigButton>
-        </div>
-      </main>
+      <SessionRecap
+        name={activeProfile.name}
+        sessionStars={sessionStars}
+        highlights={highlights}
+        leveledUp={sessionLeveled}
+        profile={activeProfile}
+        missionJustCompleted={
+          missionDone ||
+          (missionStatus(activeProfile).game.id === 'wordBuilder' && isMissionComplete(activeProfile))
+        }
+        onPlayAgain={() => {
+          playPop()
+          usedWords.current.clear()
+          setWordsDone(0)
+          setSessionStars(0)
+          setHighlights([])
+          setSessionLeveled(false)
+          setMissionDone(false)
+          setFinished(false)
+          startWord(activeProfile.progress['wordBuilder']?.level ?? startLevel)
+        }}
+        onMoreGames={() => navigate('/world/letters')}
+      />
     )
   }
 

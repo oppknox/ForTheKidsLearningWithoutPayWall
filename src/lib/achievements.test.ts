@@ -6,6 +6,7 @@ const profile = (overrides: Partial<Profile> = {}): Profile => ({
   id: 'kid', name: 'Mia', age: 6,
   avatar: { creature: 'fox', color: '#f80', accessory: 'none' },
   stars: 0, stickers: [], progress: {}, practiceDays: [], unlockedRewards: [],
+  dailyStats: {}, missionDays: [], itemMastery: {},
   ...overrides,
 })
 

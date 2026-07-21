@@ -49,4 +49,7 @@ export function collectionProgress(p: Profile, world: WorldId) {
   return { correct, milestones, earned: milestones.filter((n) => correct >= n).length }
 }
 
-export const totalGameCount = GAMES.length
+/** Safe as a function so circular imports during game module init don't read GAMES early. */
+export function totalGameCount(): number {
+  return GAMES.length
+}

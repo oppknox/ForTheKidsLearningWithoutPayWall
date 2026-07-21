@@ -1,7 +1,8 @@
-import type { DisplayProps, GameDef, Round } from '../types'
+import type { DisplayProps, GameDef, Round, RoundContext } from '../types'
 import { randInt, shuffle } from '../../lib/rng'
+import { itemKey } from '../../lib/itemMastery'
 
-function generateRound(level: number): Round {
+function generateRound(level: number, _ctx?: RoundContext): Round {
   const lvl = Math.min(Math.max(level, 1), 5)
   let a: number
   let b: number
@@ -32,6 +33,8 @@ function generateRound(level: number): Round {
       ? `What is ${a} plus ${b}? Pop the bubbles and count them all!`
       : `What is ${a} take away ${b}? Watch the bubbles pop away!`
 
+  const sumId = op === '+' ? `${a}+${b}` : `${a}-${b}`
+
   return {
     promptText: `${a} ${op === '+' ? '+' : '−'} ${b} = ?`,
     promptSpeech: speech,
@@ -48,6 +51,7 @@ function generateRound(level: number): Round {
           : `${a} take away ${b} leaves ${answer}!`,
     },
     payload: { a, b, op },
+    itemId: itemKey('sum', sumId),
   }
 }
 

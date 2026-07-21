@@ -1,5 +1,9 @@
 import type { AppState, AvatarConfig, Profile } from '../types'
 import { applyCorrect, applyHint, newProgress } from '../lib/progress'
+import { applyDayCorrect, dayStatsFor, pruneDailyStats } from '../lib/dailyStats'
+import { todayKey } from '../lib/dates'
+import { isMissionComplete, MISSION_TARGET, pickDailyMission } from '../lib/dailyMission'
+import { applyItemResult, pruneItemMastery } from '../lib/itemMastery'
 
 export type Action =
   | { type: 'addProfile'; name: string; age: number; avatar: AvatarConfig }
@@ -13,8 +17,13 @@ export type Action =
       stickerPool: string[]
       /** Age-seeded level for a game's very first play; ignored once progress exists. */
       startLevel?: number
+      /** Short label of what was practiced (for session recap + parent wins). */
+      highlight?: string
+      /** Item mastery key e.g. "letter:B", "fact:3x4". */
+      itemId?: string
     }
   | { type: 'recordHint'; gameId: string; startLevel?: number }
+  | { type: 'completeMission' }
   | { type: 'unlockReward'; rewardId: string; cost: number }
   | { type: 'setMuted'; muted: boolean }
   | { type: 'setVoice'; voiceName: string | null }
@@ -26,6 +35,18 @@ function updateActive(s: AppState, fn: (p: Profile) => Profile): AppState {
     ...s,
     profiles: s.profiles.map((p) => (p.id === s.activeProfileId ? fn(p) : p)),
   }
+}
+
+function maybeCompleteMission(p: Profile, gameId: string, date: string): string[] {
+  const missionDays = p.missionDays ?? []
+  if (missionDays.includes(date)) return missionDays
+  const mission = pickDailyMission(p, date)
+  if (mission.id !== gameId) return missionDays
+  const count = dayStatsFor(p, date).gameCorrect[gameId] ?? 0
+  if (count >= MISSION_TARGET || isMissionComplete(p, date)) {
+    return Array.from(new Set([...missionDays, date]))
+  }
+  return missionDays
 }
 
 export function reducer(s: AppState, a: Action): AppState {
@@ -41,6 +62,9 @@ export function reducer(s: AppState, a: Action): AppState {
         progress: {},
         practiceDays: [],
         unlockedRewards: [],
+        dailyStats: {},
+        missionDays: [],
+        itemMastery: {},
       }
       return { ...s, profiles: [...s.profiles, profile] }
     }
@@ -59,6 +83,7 @@ export function reducer(s: AppState, a: Action): AppState {
       return { ...s, activeProfileId: a.id }
     case 'recordCorrect':
       return updateActive(s, (p) => {
+        const date = todayKey()
         const current = p.progress[a.gameId] ?? newProgress(a.startLevel)
         const result = applyCorrect(current, a.hintsUsed)
         let stickers = p.stickers
@@ -66,18 +91,49 @@ export function reducer(s: AppState, a: Action): AppState {
           const next = a.stickerPool.find((st) => !p.stickers.includes(st))
           if (next) stickers = [...p.stickers, next]
         }
-        return {
+        const prevDay = dayStatsFor(p, date)
+        const nextDay = applyDayCorrect(
+          prevDay,
+          a.gameId,
+          a.hintsUsed,
+          result.leveledUp,
+          a.highlight,
+        )
+        const dailyStats = pruneDailyStats({
+          ...(p.dailyStats ?? {}),
+          [date]: nextDay,
+        })
+        let itemMastery = p.itemMastery ?? {}
+        if (a.itemId) {
+          itemMastery = pruneItemMastery({
+            ...itemMastery,
+            [a.itemId]: applyItemResult(itemMastery[a.itemId], a.hintsUsed),
+          })
+        }
+        const withDay: Profile = {
           ...p,
           stars: p.stars + result.starsEarned,
           stickers,
           progress: { ...p.progress, [a.gameId]: result.progress },
-          practiceDays: Array.from(new Set([...(p.practiceDays ?? []), new Date().toLocaleDateString('en-CA')])),
+          practiceDays: Array.from(new Set([...(p.practiceDays ?? []), date])),
+          dailyStats,
+          itemMastery,
+        }
+        return {
+          ...withDay,
+          missionDays: maybeCompleteMission(withDay, a.gameId, date),
         }
       })
     case 'recordHint':
       return updateActive(s, (p) => {
         const current = p.progress[a.gameId] ?? newProgress(a.startLevel)
         return { ...p, progress: { ...p.progress, [a.gameId]: applyHint(current) } }
+      })
+    case 'completeMission':
+      return updateActive(s, (p) => {
+        const date = todayKey()
+        if ((p.missionDays ?? []).includes(date)) return p
+        return { ...p, missionDays: [...(p.missionDays ?? []), date] }
       })
     case 'unlockReward':
       return updateActive(s, (p) => {
