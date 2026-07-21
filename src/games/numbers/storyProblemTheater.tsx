@@ -1,5 +1,6 @@
 import type { DisplayProps, GameDef, Round } from '../types'
 import { randInt, sample, shuffle } from '../../lib/rng'
+import { EmojiStack } from '../../components/CountableGrid'
 
 const SCENES = [
   { thing: 'apples', emoji: '🍎', actor: 'Pip' },
@@ -27,8 +28,21 @@ export function generateStoryRound(level: number): Round {
 }
 
 function Display({ round, hintTier }: DisplayProps) {
-  const { emoji, a, b, subtract } = round.payload as { emoji: string; a: number; b: number; subtract: boolean }
-  return <div className="story-stage"><div>{Array.from({ length: a }, (_, i) => <span key={`a${i}`}>{emoji}</span>)}</div><strong>{subtract ? '−' : '+'}</strong><div className={subtract && hintTier >= 2 ? 'story-away' : ''}>{Array.from({ length: b }, (_, i) => <span key={`b${i}`}>{emoji}</span>)}</div></div>
+  const { emoji, a, b, subtract } = round.payload as {
+    emoji: string
+    a: number
+    b: number
+    subtract: boolean
+  }
+  return (
+    <div className="story-stage">
+      <EmojiStack count={a} emoji={emoji} maxVisible={8} />
+      <strong>{subtract ? '−' : '+'}</strong>
+      <div className={subtract && hintTier >= 2 ? 'story-away' : ''}>
+        <EmojiStack count={b} emoji={emoji} maxVisible={8} />
+      </div>
+    </div>
+  )
 }
 
 const storyProblemTheater: GameDef = {

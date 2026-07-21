@@ -6,8 +6,8 @@ const FISH_RANGES: Record<number, [number, number]> = {
   1: [1, 5],
   2: [1, 8],
   3: [1, 10],
-  4: [4, 15],
-  5: [6, 20],
+  4: [4, 12],
+  5: [6, 12],
 }
 
 describe('countTheFish.generateRound', () => {

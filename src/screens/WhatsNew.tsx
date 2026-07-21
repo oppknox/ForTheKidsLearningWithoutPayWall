@@ -3,6 +3,15 @@ import { BigButton } from '../components/BigButton'
 
 const RELEASES: { date: string; title: string; items: string[] }[] = [
   {
+    date: 'July 21, 2026',
+    title: 'Calmer stars & gem grids',
+    items: [
+      'Big arrays (like 7×11) now show a sample row × rows — no wall of 77 sparkles.',
+      'Session stars show as a clear “⭐ 12” badge instead of a long emoji strip.',
+      'Fish, bubbles, and story props stay capped so screens stay easy to scan.',
+    ],
+  },
+  {
     date: 'July 20, 2026',
     title: 'Smarter practice paths',
     items: [

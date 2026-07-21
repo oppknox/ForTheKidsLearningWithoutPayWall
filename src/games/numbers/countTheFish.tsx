@@ -1,13 +1,15 @@
 import type { DisplayProps, GameDef, Round, RoundContext } from '../types'
 import { randInt, shuffle } from '../../lib/rng'
 import { itemKey } from '../../lib/itemMastery'
+import { EmojiStack } from '../../components/CountableGrid'
 
+/** Keep counts countable on a phone; higher levels still stretch a bit. */
 const RANGES: Record<number, [number, number]> = {
   1: [1, 5],
   2: [1, 8],
   3: [1, 10],
-  4: [4, 15],
-  5: [6, 20],
+  4: [4, 12],
+  5: [6, 12],
 }
 
 function generateRound(level: number, _ctx?: RoundContext): Round {
@@ -43,16 +45,13 @@ function Display({ round, hintTier }: DisplayProps) {
   const count = (round.payload as { count: number }).count
   return (
     <div className="fish-tank">
-      {Array.from({ length: count }, (_, i) => (
-        <span
-          key={i}
-          className="fish"
-          style={{ animationDelay: `${(i % 5) * 0.4}s` }}
-        >
-          🐠
-          {hintTier >= 2 && <span className="fish-number">{i + 1}</span>}
-        </span>
-      ))}
+      <EmojiStack
+        count={count}
+        emoji="🐠"
+        maxVisible={10}
+        numbered={hintTier >= 2}
+        className="fish-stack"
+      />
     </div>
   )
 }
