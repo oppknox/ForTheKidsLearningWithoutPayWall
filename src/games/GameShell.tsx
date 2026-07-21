@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import type { GameDef } from './types'
-import type { Round } from './types'
+import type { GameDef, Round, RoundContext } from './types'
 import { initialRound, pick, type RoundState } from './hintMachine'
 import { useAppState } from '../state/ProfilesContext'
 import { newProgress, applyCorrect } from '../lib/progress'
@@ -9,10 +8,18 @@ import { parseAges, startingLevel } from '../lib/ageFit'
 import { STICKER_POOL, WORLDS } from './registry'
 import { Mascot, type MascotMood } from '../components/Mascot'
 import { Confetti } from '../components/Confetti'
-import { BigButton } from '../components/BigButton'
+import { SessionRecap } from '../components/SessionRecap'
 import { speak } from '../lib/speech'
 import { playDing, playFanfare, playPop, playWhoosh } from '../lib/sfx'
 import { SoundToggle } from '../components/SoundToggle'
+import { highlightFromRound } from '../lib/sessionHighlight'
+import { isMissionComplete, missionStatus } from '../lib/dailyMission'
+import {
+  applyAdaptiveAnswer,
+  initialAdaptive,
+  type AdaptiveState,
+} from '../lib/adaptiveLevel'
+import type { Profile } from '../types'
 
 const NEXT_ROUND_DELAY = 1400
 
@@ -22,6 +29,19 @@ interface SessionState {
   rs: RoundState
   sessionStars: number
   finished: boolean
+  highlights: string[]
+  leveledUpThisSession: boolean
+  lastSticker: string | null
+  missionCompletedThisSession: boolean
+  adaptive: AdaptiveState
+  recentItemIds: string[]
+}
+
+function buildRoundContext(profile: Profile | null, recentItemIds: string[]): RoundContext {
+  return {
+    recentItemIds,
+    allMastery: profile?.itemMastery,
+  }
 }
 
 export function GameShell({ game }: { game: GameDef }) {
@@ -30,26 +50,58 @@ export function GameShell({ game }: { game: GameDef }) {
   const [burst, setBurst] = useState(0)
   const [levelUpSticker, setLevelUpSticker] = useState<string | null>(null)
   const [leveledUp, setLeveledUp] = useState(false)
+  const [adaptBanner, setAdaptBanner] = useState<string | null>(null)
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const missionWasComplete = useRef(false)
 
   const startLevel = activeProfile
     ? startingLevel(activeProfile.age, parseAges(game.ages))
     : 1
-  const level = activeProfile?.progress[game.id]?.level ?? startLevel
+  const profileLevel = activeProfile?.progress[game.id]?.level ?? startLevel
 
-  const startRound = useCallback(
-    (roundIndex: number, sessionStars: number): SessionState => ({
-      roundIndex,
-      round: game.generateRound(level),
-      rs: initialRound(),
-      sessionStars,
-      finished: false,
-    }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  const makeRound = useCallback(
+    (level: number, recentItemIds: string[], profile: Profile | null) =>
+      game.generateRound(level, buildRoundContext(profile, recentItemIds)),
     [game],
   )
 
-  const [session, setSession] = useState<SessionState>(() => startRound(0, 0))
+  const startRound = useCallback(
+    (
+      roundIndex: number,
+      sessionStars: number,
+      highlights: string[] = [],
+      meta?: Partial<SessionState>,
+      profile: Profile | null = activeProfile,
+    ): SessionState => {
+      const adaptive = meta?.adaptive ?? initialAdaptive(profileLevel)
+      const recentItemIds = meta?.recentItemIds ?? []
+      return {
+        roundIndex,
+        round: makeRound(adaptive.level, recentItemIds, profile),
+        rs: initialRound(),
+        sessionStars,
+        finished: false,
+        highlights,
+        leveledUpThisSession: meta?.leveledUpThisSession ?? false,
+        lastSticker: meta?.lastSticker ?? null,
+        missionCompletedThisSession: meta?.missionCompletedThisSession ?? false,
+        adaptive,
+        recentItemIds,
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [game, profileLevel, makeRound],
+  )
+
+  const [session, setSession] = useState<SessionState>(() =>
+    startRound(0, 0, [], undefined, activeProfile),
+  )
+
+  useEffect(() => {
+    if (activeProfile) {
+      missionWasComplete.current = isMissionComplete(activeProfile)
+    }
+  }, [activeProfile?.id]) // only on profile switch / mount
 
   // Speak the prompt whenever a new round begins.
   useEffect(() => {
@@ -89,35 +141,93 @@ export function GameShell({ game }: { game: GameDef }) {
       playDing()
       const current = activeProfile.progress[game.id] ?? newProgress(startLevel)
       const result = applyCorrect(current, hintsUsed)
+      const highlight = highlightFromRound(round)
+      const highlights = session.highlights.includes(highlight)
+        ? session.highlights
+        : [...session.highlights, highlight]
+
+      const adaptive = applyAdaptiveAnswer(session.adaptive, hintsUsed)
+      const recentItemIds = round.itemId
+        ? [...session.recentItemIds, round.itemId].slice(-8)
+        : session.recentItemIds
+
+      let sticker: string | null = session.lastSticker
+      let sessionLeveled = session.leveledUpThisSession
       if (result.leveledUp) {
-        const sticker = STICKER_POOL.find((s) => !activeProfile.stickers.includes(s)) ?? null
+        sticker = STICKER_POOL.find((s) => !activeProfile.stickers.includes(s)) ?? null
         setLevelUpSticker(sticker)
         setLeveledUp(true)
+        sessionLeveled = true
         playFanfare()
         setBurst((b) => b + 1)
         speak(`Level up! Amazing, ${activeProfile.name}!`)
+      } else if (adaptive.bumpedUp) {
+        setAdaptBanner('A little trickier — you are ready!')
+        speak('A little trickier now. You are ready!')
+      } else if (adaptive.easedDown) {
+        setAdaptBanner('Let’s take an easier path for a bit.')
+        speak(pickPraise())
       } else {
         speak(pickPraise())
       }
+
       dispatch({
         type: 'recordCorrect',
         gameId: game.id,
         hintsUsed,
         stickerPool: STICKER_POOL,
         startLevel,
+        highlight,
+        itemId: round.itemId,
       })
+
+      const mission = missionStatus(activeProfile)
+      const missionGameMatch = mission.game.id === game.id
+      const nextMissionCount = missionGameMatch ? mission.correct + 1 : mission.correct
+      const missionJustDone =
+        missionGameMatch &&
+        !missionWasComplete.current &&
+        (mission.complete || nextMissionCount >= mission.target)
+      if (missionJustDone) missionWasComplete.current = true
+
       const isLast = session.roundIndex + 1 >= game.roundsPerSession
-      setSession({ ...session, rs: next, sessionStars: session.sessionStars + result.starsEarned })
+      setSession({
+        ...session,
+        rs: next,
+        sessionStars: session.sessionStars + result.starsEarned,
+        highlights,
+        leveledUpThisSession: sessionLeveled,
+        lastSticker: sticker,
+        missionCompletedThisSession:
+          session.missionCompletedThisSession || missionJustDone,
+        adaptive,
+        recentItemIds,
+      })
       timer.current = setTimeout(() => {
         setLeveledUp(false)
         setLevelUpSticker(null)
+        setAdaptBanner(null)
         if (isLast) {
           playFanfare()
           setBurst((b) => b + 1)
           speak('You did it! Hooray!')
           setSession((s) => ({ ...s, finished: true }))
         } else {
-          setSession((s) => startRound(s.roundIndex + 1, s.sessionStars))
+          setSession((s) =>
+            startRound(
+              s.roundIndex + 1,
+              s.sessionStars,
+              s.highlights,
+              {
+                leveledUpThisSession: s.leveledUpThisSession,
+                lastSticker: s.lastSticker,
+                missionCompletedThisSession: s.missionCompletedThisSession,
+                adaptive: s.adaptive,
+                recentItemIds: s.recentItemIds,
+              },
+              activeProfile,
+            ),
+          )
         }
       }, NEXT_ROUND_DELAY + (result.leveledUp ? 800 : 0))
       return
@@ -134,35 +244,29 @@ export function GameShell({ game }: { game: GameDef }) {
 
   if (session.finished) {
     return (
-      <main className="screen">
-        <Confetti burst={burst} />
-        <Mascot mood="celebrate" size={140} />
-        <h1 className="screen-title">Hooray, {activeProfile.name}!</h1>
-        <p className="finish-stars">
-          You earned {'⭐'.repeat(Math.min(session.sessionStars, 15))}
-          {session.sessionStars > 15 ? ` ×${session.sessionStars}` : ''}
-        </p>
-        <div className="editor-actions">
-          <BigButton
-            onClick={() => {
-              playPop()
-              setSession(startRound(0, 0))
-            }}
-          >
-            Play again!
-          </BigButton>
-          <BigButton color="var(--ocean)" onClick={() => navigate(`/world/${game.world}`)}>
-            More games
-          </BigButton>
-        </div>
-      </main>
+      <SessionRecap
+        name={activeProfile.name}
+        sessionStars={session.sessionStars}
+        highlights={session.highlights}
+        leveledUp={session.leveledUpThisSession}
+        sticker={session.lastSticker}
+        profile={activeProfile}
+        missionJustCompleted={session.missionCompletedThisSession}
+        burst={burst}
+        onPlayAgain={() => {
+          playPop()
+          missionWasComplete.current = isMissionComplete(activeProfile)
+          setSession(startRound(0, 0, [], undefined, activeProfile))
+        }}
+        onMoreGames={() => navigate(`/world/${game.world}`)}
+      />
     )
   }
 
   const Display = game.Display
 
   return (
-    <main className="screen game-screen">
+    <main className={`screen game-screen game-${game.id}`}>
       <Confetti burst={burst} />
       <header className="play-header">
         <Link to={`/world/${game.world}`} className="header-chip">
@@ -187,6 +291,11 @@ export function GameShell({ game }: { game: GameDef }) {
         <div className="levelup-banner">
           🎉 Level up!{' '}
           {levelUpSticker ? `New sticker: ${levelUpSticker}` : 'You are unstoppable!'}
+        </div>
+      )}
+      {!leveledUp && adaptBanner && (
+        <div className="adapt-banner" role="status">
+          {adaptBanner}
         </div>
       )}
 

@@ -31,6 +31,9 @@ describe('profile management', () => {
     expect(p.progress).toEqual({})
     expect(p.practiceDays).toEqual([])
     expect(p.unlockedRewards).toEqual([])
+    expect(p.dailyStats).toEqual({})
+    expect(p.missionDays).toEqual([])
+    expect(p.itemMastery).toEqual({})
     expect(p.id).toBeTruthy()
   })
 
@@ -83,6 +86,55 @@ describe('recordCorrect', () => {
     expect(p.progress.letterPop.totalCorrect).toBe(1)
     expect(p.progress.letterPop.streak).toBe(1)
     expect(p.stars).toBe(3)
+  })
+
+  it('rolls up daily stats and highlights for parent wins', () => {
+    let s = stateWithChild()
+    s = reducer(s, {
+      type: 'recordCorrect',
+      gameId: 'letterPop',
+      hintsUsed: 0,
+      stickerPool: [],
+      highlight: 'B',
+    })
+    s = reducer(s, {
+      type: 'recordCorrect',
+      gameId: 'letterPop',
+      hintsUsed: 1,
+      stickerPool: [],
+      highlight: 'M',
+    })
+    const days = Object.values(s.profiles[0].dailyStats)
+    expect(days).toHaveLength(1)
+    const day = days[0]
+    expect(day.correct).toBe(2)
+    expect(day.perfect).toBe(1)
+    expect(day.games).toEqual(['letterPop'])
+    expect(day.highlights).toEqual(['B', 'M'])
+    expect(day.gameCorrect.letterPop).toBe(2)
+  })
+
+  it('tracks item-level mastery keys', () => {
+    let s = stateWithChild()
+    s = reducer(s, {
+      type: 'recordCorrect',
+      gameId: 'letterPop',
+      hintsUsed: 0,
+      stickerPool: [],
+      itemId: 'letter:B',
+    })
+    s = reducer(s, {
+      type: 'recordCorrect',
+      gameId: 'letterPop',
+      hintsUsed: 2,
+      stickerPool: [],
+      itemId: 'letter:B',
+    })
+    const item = s.profiles[0].itemMastery['letter:B']
+    expect(item.seen).toBe(2)
+    expect(item.perfect).toBe(1)
+    expect(item.withHelp).toBe(1)
+    expect(item.strength).toBeGreaterThan(0)
   })
 
   it('grants the first unowned sticker on level-up', () => {

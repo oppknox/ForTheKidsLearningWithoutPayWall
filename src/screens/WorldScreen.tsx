@@ -7,6 +7,7 @@ import type { WorldId } from '../types'
 import { playPop } from '../lib/sfx'
 import { speak } from '../lib/speech'
 import { SoundToggle } from '../components/SoundToggle'
+import { SkillPath } from '../components/SkillPath'
 
 const FIT_LABEL: Record<AgeFit, string | null> = {
   fit: null,
@@ -47,6 +48,8 @@ export function WorldScreen() {
       <h1 className="screen-title">
         {world.emoji} {world.title}
       </h1>
+
+      <SkillPath world={wid} profile={activeProfile} />
 
       <div className="game-grid">
         {games.map((g) => {

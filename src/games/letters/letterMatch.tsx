@@ -1,9 +1,20 @@
-import type { DisplayProps, GameDef, Round } from '../types'
+import type { DisplayProps, GameDef, Round, RoundContext } from '../types'
 import { ALPHABET, entryFor, lookalikesFor } from './letterData'
 import { sample, shuffle } from '../../lib/rng'
+import { itemKey, pickPreferredId } from '../../lib/itemMastery'
 
-function generateRound(level: number): Round {
-  const target = sample(ALPHABET, 1)[0]
+function generateRound(level: number, ctx?: RoundContext): Round {
+  const letters = ALPHABET.map((e) => e.letter)
+  const recent = (ctx?.recentItemIds ?? [])
+    .filter((k) => k.startsWith('letter:'))
+    .map((k) => k.slice('letter:'.length))
+  const preferred =
+    ctx?.preferItemId?.startsWith('letter:')
+      ? ctx.preferItemId.slice('letter:'.length)
+      : pickPreferredId(ctx?.allMastery, 'letter', letters, recent)
+  const target =
+    ALPHABET.find((e) => e.letter === preferred) ?? sample(ALPHABET, 1)[0]
+
   const count = Math.min(3 + level, 6)
 
   let distractors: string[] = []
@@ -13,18 +24,19 @@ function generateRound(level: number): Round {
   )
   distractors = [...distractors, ...sample(remaining, count - 1 - distractors.length)]
 
-  const letters = shuffle([target.letter, ...distractors])
+  const choiceLetters = shuffle([target.letter, ...distractors])
 
   return {
     promptText: `Find the little ${target.letter.toLowerCase()}!`,
     promptSpeech: `Big ${target.letter} needs its little match! Find the small ${target.letter}!`,
-    choices: letters.map((l) => ({ id: l.toLowerCase(), label: l.toLowerCase() })),
+    choices: choiceLetters.map((l) => ({ id: l.toLowerCase(), label: l.toLowerCase() })),
     answerId: target.letter.toLowerCase(),
     hints: {
       nudge: `Big ${target.letter} and little ${target.letter.toLowerCase()} are the same letter — ${target.letter} for ${target.word} ${target.emoji}!`,
       explain: `This is little ${target.letter.toLowerCase()}! Big ${target.letter} and little ${target.letter.toLowerCase()} go together!`,
     },
     payload: { target: target.letter },
+    itemId: itemKey('letter', target.letter),
   }
 }
 

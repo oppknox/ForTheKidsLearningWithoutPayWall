@@ -21,6 +21,11 @@ export function normalizeState(value: unknown): AppState | null {
       ...profile,
       practiceDays: Array.isArray(profile.practiceDays) ? profile.practiceDays : [],
       unlockedRewards: Array.isArray(profile.unlockedRewards) ? profile.unlockedRewards : [],
+      dailyStats:
+        profile.dailyStats && typeof profile.dailyStats === 'object' ? profile.dailyStats : {},
+      missionDays: Array.isArray(profile.missionDays) ? profile.missionDays : [],
+      itemMastery:
+        profile.itemMastery && typeof profile.itemMastery === 'object' ? profile.itemMastery : {},
     })),
   }
 }

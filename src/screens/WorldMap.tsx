@@ -2,6 +2,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useAppState } from '../state/ProfilesContext'
 import { AvatarSVG } from '../components/AvatarSVG'
 import { Mascot } from '../components/Mascot'
+import { DailyMissionCard } from '../components/DailyMissionCard'
 import { WORLDS } from '../games/registry'
 import type { WorldId } from '../types'
 import { playPop } from '../lib/sfx'
@@ -51,6 +52,8 @@ export function WorldMap() {
       <p className="screen-subtitle">
         We recommend a starting place for age {activeProfile.age}, but every world is open.
       </p>
+
+      <DailyMissionCard profile={activeProfile} />
 
       <div className="world-grid">
         {worldIds.map((id) => (

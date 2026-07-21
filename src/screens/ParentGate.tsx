@@ -1,4 +1,4 @@
-import { useMemo, useState, type FormEvent } from 'react'
+import { useMemo, useState, type FormEvent, type ReactNode } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAppState } from '../state/ProfilesContext'
 import { AvatarSVG } from '../components/AvatarSVG'
@@ -8,9 +8,12 @@ import { InstallApp } from '../components/InstallApp'
 import { VoicePicker } from '../components/VoicePicker'
 import { SiteFooter } from '../components/SiteFooter'
 import { BackupSync } from '../components/BackupSync'
+import { ParentWins } from '../components/ParentWins'
 
 const GATE_KEY = 'ftk-gate-ok'
 const GATE_TTL_MS = 10 * 60 * 1000
+
+type GrownUpsTab = 'wins' | 'players' | 'settings'
 
 function gateRecentlyPassed(): boolean {
   try {
@@ -89,54 +92,171 @@ function Gate({ onPass }: { onPass: () => void }) {
 function GrownUps() {
   const { state, dispatch } = useAppState()
   const navigate = useNavigate()
+  const hasPlayers = state.profiles.length > 0
+  // First-time: land on Players. Returning: land on Wins.
+  const [tab, setTab] = useState<GrownUpsTab>(hasPlayers ? 'wins' : 'players')
+  const activeTab: GrownUpsTab = !hasPlayers && tab === 'wins' ? 'players' : tab
 
   return (
-    <main className="screen">
-      <h1 className="screen-title">Players</h1>
-      <div className="manage-list">
-        {state.profiles.map((p) => (
-          <div key={p.id} className="manage-row">
-            <AvatarSVG config={p.avatar} size={64} />
-            <div className="manage-info">
-              <strong>{p.name}</strong>
-              <span>
-                Age {p.age} · ⭐ {p.stars} · {p.stickers.length} stickers
-              </span>
-            </div>
-            <Link to={`/grown-ups/edit/${p.id}`} className="manage-edit">
-              Edit
-            </Link>
-            <button
-              className="manage-delete"
-              onClick={() => {
-                if (confirm(`Delete ${p.name}'s player and all their progress?`))
-                  dispatch({ type: 'deleteProfile', id: p.id })
-              }}
-            >
-              Delete
-            </button>
+    <main className="screen grown-ups-screen">
+      <h1 className="screen-title">Grown-ups</h1>
+      <p className="grown-ups-subtitle">
+        {hasPlayers
+          ? 'See today’s wins, manage players, or tweak settings.'
+          : 'Add your first player to get started — free, no account needed.'}
+      </p>
+
+      {hasPlayers && (
+        <div className="grown-ups-tabs" role="tablist" aria-label="Grown-ups sections">
+          <TabButton id="wins" active={activeTab === 'wins'} onClick={() => setTab('wins')}>
+            Wins
+          </TabButton>
+          <TabButton id="players" active={activeTab === 'players'} onClick={() => setTab('players')}>
+            Players
+          </TabButton>
+          <TabButton id="settings" active={activeTab === 'settings'} onClick={() => setTab('settings')}>
+            Settings
+          </TabButton>
+        </div>
+      )}
+
+      {activeTab === 'wins' && hasPlayers && (
+        <div role="tabpanel" aria-label="Wins today" className="grown-ups-panel">
+          <ParentWins />
+          <BigButton color="var(--ocean)" onClick={() => navigate('/')}>
+            Done
+          </BigButton>
+        </div>
+      )}
+
+      {activeTab === 'players' && (
+        <div role="tabpanel" aria-label="Players" className="grown-ups-panel">
+          <div className="manage-list">
+            {state.profiles.map((p) => (
+              <div key={p.id} className="manage-row">
+                <AvatarSVG config={p.avatar} size={64} />
+                <div className="manage-info">
+                  <strong>{p.name}</strong>
+                  <span>
+                    Age {p.age} · ⭐ {p.stars} · {p.stickers.length} stickers
+                  </span>
+                </div>
+                <Link to={`/grown-ups/edit/${p.id}`} className="manage-edit">
+                  Edit
+                </Link>
+                <button
+                  className="manage-delete"
+                  onClick={() => {
+                    if (confirm(`Delete ${p.name}'s player and all their progress?`))
+                      dispatch({ type: 'deleteProfile', id: p.id })
+                  }}
+                >
+                  Delete
+                </button>
+              </div>
+            ))}
+            {state.profiles.length === 0 && (
+              <p className="screen-subtitle">No players yet — add your first!</p>
+            )}
           </div>
-        ))}
-        {state.profiles.length === 0 && (
-          <p className="screen-subtitle">No players yet — add your first!</p>
-        )}
-      </div>
-      <BigButton onClick={() => navigate('/grown-ups/edit')}>+ Add a player</BigButton>
+          <BigButton onClick={() => navigate('/grown-ups/edit')}>+ Add a player</BigButton>
+          <BigButton color="var(--ocean)" onClick={() => navigate('/')}>
+            Done
+          </BigButton>
+          {hasPlayers && (
+            <button type="button" className="text-link-btn" onClick={() => setTab('settings')}>
+              Sound, backup & install →
+            </button>
+          )}
+        </div>
+      )}
+
+      {activeTab === 'settings' && hasPlayers && <SettingsPanel />}
+
+      {/* First-time: no tabs — keep setup simple, tuck advanced under a disclosure */}
+      {!hasPlayers && (
+        <details className="grown-ups-advanced">
+          <summary>Optional: sound, backup & install</summary>
+          <SettingsBody />
+        </details>
+      )}
+
+      <SiteFooter />
+    </main>
+  )
+}
+
+function SettingsPanel() {
+  const navigate = useNavigate()
+  return (
+    <div role="tabpanel" aria-label="Settings" className="grown-ups-panel">
+      <SettingsBody />
       <BigButton color="var(--ocean)" onClick={() => navigate('/')}>
         Done
       </BigButton>
-      <label className="mute-row">
-        <input
-          type="checkbox"
-          checked={state.muted}
-          onChange={(e) => dispatch({ type: 'setMuted', muted: e.target.checked })}
-        />
-        Mute all sound and voices
-      </label>
-      <VoicePicker />
-      <BackupSync />
-      <InstallApp />
-      <SiteFooter />
-    </main>
+    </div>
+  )
+}
+
+function SettingsBody() {
+  const { state, dispatch } = useAppState()
+  return (
+    <>
+      <section className="settings-block" aria-labelledby="sound-settings-title">
+        <h2 id="sound-settings-title" className="settings-block-title">
+          Sound
+        </h2>
+        <label className="mute-row">
+          <input
+            type="checkbox"
+            checked={state.muted}
+            onChange={(e) => dispatch({ type: 'setMuted', muted: e.target.checked })}
+          />
+          Mute all sound and voices
+        </label>
+        <VoicePicker />
+      </section>
+
+      <details className="grown-ups-advanced" open={false}>
+        <summary>
+          <span>Save progress</span>
+          <span className="advanced-hint">Backup & device sync</span>
+        </summary>
+        <BackupSync />
+      </details>
+
+      <details className="grown-ups-advanced" open={false}>
+        <summary>
+          <span>Install the app</span>
+          <span className="advanced-hint">Faster, offline play</span>
+        </summary>
+        <InstallApp />
+      </details>
+    </>
+  )
+}
+
+function TabButton({
+  id,
+  active,
+  onClick,
+  children,
+}: {
+  id: string
+  active: boolean
+  onClick: () => void
+  children: ReactNode
+}) {
+  return (
+    <button
+      type="button"
+      role="tab"
+      id={`tab-${id}`}
+      aria-selected={active}
+      className={`grown-ups-tab ${active ? 'active' : ''}`}
+      onClick={onClick}
+    >
+      {children}
+    </button>
   )
 }

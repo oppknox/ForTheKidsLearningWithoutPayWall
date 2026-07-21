@@ -14,6 +14,9 @@ const sampleState: AppState = {
       progress: { letterPop: { level: 2, streak: 1, totalCorrect: 9 } },
       practiceDays: [],
       unlockedRewards: [],
+      dailyStats: {},
+      missionDays: [],
+      itemMastery: {},
     },
   ],
   activeProfileId: 'p1',
@@ -59,6 +62,27 @@ describe('storage', () => {
     const loaded = loadState()
     expect(loaded.muted).toBe(true)
     expect(loaded.voiceName).toBeNull()
+  })
+
+  it('fills dailyStats and missionDays on legacy profiles', () => {
+    const legacyProfile = {
+      id: 'p1',
+      name: 'Mia',
+      age: 5,
+      avatar: { creature: 'fox', color: '#ff8800', accessory: 'bow' },
+      stars: 0,
+      stickers: [],
+      progress: {},
+    }
+    const loaded = normalizeState({
+      profiles: [legacyProfile],
+      activeProfileId: null,
+      muted: false,
+    })
+    expect(loaded?.profiles[0].dailyStats).toEqual({})
+    expect(loaded?.profiles[0].missionDays).toEqual([])
+    expect(loaded?.profiles[0].itemMastery).toEqual({})
+    expect(loaded?.profiles[0].practiceDays).toEqual([])
   })
 
   it('normalizeState accepts real backups and rejects malformed ones', () => {

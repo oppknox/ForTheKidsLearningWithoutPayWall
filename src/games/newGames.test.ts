@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { generateShapeRound } from './letters/shapeSafari'
-import { generateSoundRound } from './letters/soundGarden'
+import { generateSoundRound, SOUND_SETS } from './letters/soundGarden'
 import { generatePatternRound } from './numbers/patternParade'
 import { generateClockRound } from './numbers/clockworkCastle'
 import { generateStoryRound } from './numbers/storyProblemTheater'
@@ -41,6 +41,22 @@ describe('fraction pizza distractors', () => {
         expect(cn * d).not.toBe(n * cd)
       }
     }
+  })
+})
+
+describe('sound garden A–Z coverage', () => {
+  it('includes one beginning-sound set per letter', () => {
+    expect(SOUND_SETS).toHaveLength(26)
+    const letters = SOUND_SETS.map((s) => s.letter).sort()
+    expect(letters.join('')).toBe('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+    for (const set of SOUND_SETS) {
+      expect(set.items[0][0].toLowerCase().startsWith(set.letter.toLowerCase()) || set.letter === 'X').toBe(true)
+    }
+  })
+
+  it('tags rounds with sound mastery item ids', () => {
+    const round = generateSoundRound(3)
+    expect(round.itemId).toMatch(/^sound:[A-Z]$/)
   })
 })
 

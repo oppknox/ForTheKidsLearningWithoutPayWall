@@ -4,6 +4,25 @@ import { BigButton } from '../components/BigButton'
 const RELEASES: { date: string; title: string; items: string[] }[] = [
   {
     date: 'July 20, 2026',
+    title: 'Smarter practice paths',
+    items: [
+      'Treasure Path on each world suggests a gentle learning order — nothing is locked.',
+      'Games remember tricky letters and facts and bring them back until they feel easy.',
+      'Difficulty can ease up or step up mid-session based on how play is going.',
+      'Pip’s Sound Garden now covers the full A–Z of beginning sounds.',
+    ],
+  },
+  {
+    date: 'July 20, 2026',
+    title: 'Daily missions + parent wins',
+    items: [
+      'Pip’s Daily Mission on the world map — five minutes of age-fit practice with a progress star.',
+      'Session recap shows what your child just practiced and their next treasure goal.',
+      'Grown-ups area now opens with a “Wins today” snapshot: answers, no-hint moments, level-ups, and weekly practice days.',
+    ],
+  },
+  {
+    date: 'July 20, 2026',
     title: 'Pick your voice + easy install',
     items: [
       'Grown-ups can now choose which reading voice Pip uses (per device) and preview it.',

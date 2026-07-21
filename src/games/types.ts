@@ -1,5 +1,5 @@
 import type { ComponentType } from 'react'
-import type { WorldId } from '../types'
+import type { ItemMastery, WorldId } from '../types'
 
 export interface Hints {
   /** Tier 1: spoken encouragement + a restated clue. */
@@ -21,6 +21,18 @@ export interface Round {
   hints: Hints
   /** Game-specific display data (fish count, factors, balloon flag...). */
   payload?: unknown
+  /**
+   * Stable mastery key (e.g. "letter:B", "fact:3x4", "sound:M").
+   * When set, progress is tracked per item across games.
+   */
+  itemId?: string
+}
+
+/** Optional context so generators can prefer weak items and avoid recent repeats. */
+export interface RoundContext {
+  preferItemId?: string
+  recentItemIds?: string[]
+  allMastery?: Record<string, ItemMastery>
 }
 
 export interface DisplayProps {
@@ -37,7 +49,7 @@ export interface GameDef {
   emoji: string
   ages: string
   roundsPerSession: number
-  generateRound(level: number): Round
+  generateRound(level: number, ctx?: RoundContext): Round
   /** Scene rendered above the answer choices. */
   Display?: ComponentType<DisplayProps>
   /** Non-quiz games (Alphabet Parade) render this instead of the quiz shell. */
